@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/first_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_feeds"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="@string/drawer_feeds" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/drawer_settings" />
+        <item
+            android:id="@+id/nav_color"
+            android:icon="@drawable/icon_paint_palette_48"
+            android:title="@string/activity_color" />
+    </group>
+
+    <group
+        android:id="@+id/second_group"
+        android:visible="false"
+        android:checkableBehavior="single">
+    </group>
+
+</menu>

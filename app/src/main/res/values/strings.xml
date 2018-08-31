@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">FlexiReader</string>
+    <string name="text_feed">FlexiReader</string>
+    <string name="text_title">This item did not provide a title …</string>
+    <string name="text_desc">This item did not provide a description …</string>
+    <string name="text_date">This item did not provide a date …</string>
+    <string name="image_description">Image description</string>
+    <string name="enter_title">Enter feed name</string>
+    <string name="enter_desc">http://www.somefeed.com/rss/</string>
+    <string name="btn_update">Update</string>
+    <string name="btn_delete">Delete</string>
+    <string name="add_record">Add Record</string>
+    <string name="feeds_add_name">Give your feed a name</string>
+    <string name="feeds_add_link">You must enter a link</string>
+    <string name="feeds_add_link_error">Your link does not seem to be correct</string>
+
+    <string name="about_close">Close</string>
+
+    <string name="activity_color">Colour Picker</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">FlexiReader</string>
+    <string name="nav_header_subtitle">Fast, safe, secure</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="drawer_feeds">Feeds</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="drawer_slideshow">Slideshow</string>
+    <string name="drawer_tools">Tools</string>
+    <string name="drawer_communicate">Communicate</string>
+    <string name="drawer_share">Share</string>
+    <string name="drawer_send">Send</string>
+
+    <string name="action_about">About</string>
+
+    <string name="feeds_name">RSS News Feeds</string>
+    <string name="feeds_add_record">Add News Feed</string>
+    <string name="feeds_warning">Add a news feed</string>
+    <string name="feeds_modify_record">Modify Feed</string>
+
+    <!--<string name="fab1_text">ADD</string>-->
+    <!--<string name="fab2_text">IMP</string>-->
+
+    <!-- Strings related to Settings -->
+    <string name="settings_name">Settings</string>
+    <string name="pref_image_title">Image Settings</string>
+    <string name="pref_image_checkbox_title">Note: not all feeds have images</string>
+    <string name="pref_image_summary_on">Images are Enabled</string>
+    <string name="pref_image_summary_off">Images are Disabled</string>
+
+
+    <!--<string name="pref_view_settings_title">Viewer Settings</string>-->
+
+
+    <!--<string-array name="pref_view_settings_list_titles">-->
+        <!--<item>Show Images (slower)</item>-->
+        <!--<item>Text Only (faster)</item>-->
+    <!--</string-array>-->
+
+    <!--<string-array name="pref_example_list_values">-->
+        <!--<item>1</item>-->
+        <!--<item>0</item>-->
+    <!--</string-array>-->
+
+</resources>

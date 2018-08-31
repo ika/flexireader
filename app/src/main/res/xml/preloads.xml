@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feeds>
+    <item>
+        <title>Russia Today</title>
+        <link>https://www.rt.com/rss/</link>
+    </item>
+    <item>
+        <title>TV2 Danmark</title>
+        <link>http://feeds.tv2.dk/nyheder/rss</link>
+    </item>
+    <item>
+        <title>BBC</title>
+        <link>http://feeds.bbci.co.uk/news/rss.xml</link>
+    </item>
+    <item>
+        <title>News24</title>
+        <link>http://feeds.news24.com/articles/News24/TopStories/rss</link>
+    </item>
+    <item>
+        <title>Al Jazeera</title>
+        <link>https://www.aljazeera.com/xml/rss/all.xml</link>
+    </item>
+    <item>
+        <title>Reuters</title>
+        <link>http://feeds.reuters.com/reuters/topNews</link>
+    </item>
+    <item>
+        <title>DistroWatch</title>
+        <link>https://distrowatch.com/news/dw.xml</link>
+    </item>
+    <item>
+        <title>Antiwar.com</title>
+        <link>http://original.antiwar.com/feed/</link>
+    </item>
+    <item>
+        <title>NASA</title>
+        <link>https://www.nasa.gov/rss/dyn/breaking_news.rss</link>
+    </item>
+    <item>
+        <title>ABC News</title>
+        <link>https://abcnews.go.com/abcnews/topstories</link>
+    </item>
+    <item>
+        <title>TechRepublic</title>
+        <link>https://www.techrepublic.com/rssfeeds/articles/</link>
+    </item>
+
+</feeds>
