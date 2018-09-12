@@ -7,30 +7,42 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.Toast;
+
 import java.util.List;
+
 
 
 public class MainActivity extends AboutActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static MainActivity instance;
 
-    private final String TAG = "LOG";
+    private final String TAG = "LOGGING";
+
+    // https://www.androidhive.info/2016/01/android-working-with-recycler-view/
+    private List<Article> articles;
+    private RecyclerView recyclerView;
+    private CustomAdapter customAdapter;
 
     private static String savedID = "0"; // _id
     private static String urlAddress = null; // link
@@ -38,8 +50,6 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
     private static String feedID = ""; // feedID
 
     public static SwipeRefreshLayout swipeRefreshLayout;
-
-    private ListView listView;
 
     //private final Context context;
     private static SharedPreferences sharedPrefs;
@@ -52,12 +62,12 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recyclerView = findViewById(R.id.recycler_view);
+
         instance = this;
 
         // init database
         dbManager = new DBManager(this);
-
-        listView = findViewById(R.id.listview);
 
         // get default values - called only once (false) true resets
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -101,8 +111,6 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
         ValuesModel values = new ValuesModel();
         values.setId(savedID);
 
-        //""(TAG, "onCreate: savedID " + savedID);
-
         if (dbManager.checkIDexists(values)) { // does ID exist?
 
             Cursor cursor = dbManager.getRecordById(values);
@@ -128,7 +136,7 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
         List<ValuesModel> allValues = dbManager.getAllRecords();
 
         for (ValuesModel value : allValues) {
-            drawerMenu.add(R.id.second_group, Integer.parseInt(value.getId()), 100, value.getTitle() );
+            drawerMenu.add(R.id.second_group, Integer.parseInt(value.getId()), 100, value.getTitle());
         }
 
         drawerMenu.setGroupCheckable(R.id.second_group, true, true);
@@ -138,11 +146,11 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {  // on pull down
-                downLoadFeed();
-            }
-        });
+                    @Override
+                    public void onRefresh() {  // on pull down
+                        downLoadFeed();
+                    }
+                });
         swipeRefreshLayout.setDistanceToTriggerSync(30);
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
 
@@ -155,7 +163,7 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
         swipeRefreshLayout.post(new Runnable() { // on start up
                                     @Override
                                     public void run() {
-                                        if (checkFeedCount() < 1 ) {
+                                        if (checkFeedCount() < 1) {
                                             downLoadFeed();
                                         } else {
                                             displayList();
@@ -215,7 +223,6 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
     private int checkFeedCount() {
 
         int cnt = dbManager.countCacheByFeed(feedID);
-        //""(TAG, "countCacheByFeed: " + cnt);
 
         return cnt;
 
@@ -223,7 +230,40 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
 
     public void displayList() {
 
-        listView.setAdapter(new CustomAdapter(this, dbManager.getAllCacheRecords(feedID)));
+        articles = dbManager.getAllCacheRecords(feedID);
+        customAdapter = new CustomAdapter(MainActivity.this, articles);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(customAdapter);
+
+        // row click listener
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                Article article = articles.get(position);
+                String url = article.getLink();
+                if (URLUtil.isValidUrl(url)) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                } else {
+                    String txt = "No link provided";
+                    makeToast(txt);
+                }
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        String cnt = Integer.toString(dbManager.countCacheByFeed(feedID));
+        cnt = cnt + " items";
+        makeToast(cnt);
 
     }
 
@@ -233,7 +273,7 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
 
             if (urlAddress != null && urlAddress.length() > 0) {
                 swipeRefreshLayout.setRefreshing(true);
-                new Downloader(MainActivity.this, urlAddress, feedID ).execute();
+                new Downloader(MainActivity.this, urlAddress, feedID).execute();
             }
         }
     }
@@ -242,13 +282,15 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
 
         String dbid = Integer.toString(menuID);
 
-        //""(TAG, "saveSelection menuID: " + dbid);
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putString("dbid", dbid);
         editor.apply();
 
+    }
+
+    private void makeToast(String txt){
+        Toast.makeText(this, txt, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/pref_image_title"
-        android:key="images">
+        android:key="images_settings"
+        android:title="@string/pref_image_title">
 
         <CheckBoxPreference
             android:id="@+id/CheckBoxImagePref"
-            android:key="prefImages"
-            android:title="@string/pref_image_checkbox_title"
+            android:defaultValue="false"
+            android:key="prefImagesSettings"
             android:summary=""
-            android:defaultValue="false" />
+            android:title="@string/pref_image_checkbox_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="cache_settings"
+        android:title="@string/pref_cache_title">
+
+        <ListPreference
+            android:id="@+id/ListCachePref"
+            android:defaultValue="12"
+            android:dialogTitle="@string/pref_cache_dialog_title"
+            android:entries="@array/pref_cache_list_values"
+            android:entryValues="@array/pref_cache_list_values"
+            android:key="prefCacheSetting"
+            android:summary=""
+            android:title="@string/pref_cache_sub_title" />
 
     </PreferenceCategory>
 

@@ -1,10 +1,13 @@
 package org.armstrong.ika.FlexiReader;
 
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+import org.jsoup.safety.Whitelist;
 
 public class HTMLUtils {
 
@@ -16,25 +19,31 @@ public class HTMLUtils {
         //wlist.addTags("&nbsp;");
         html = Jsoup.clean(html, wlist);
         html = html.replace("&nbsp;", " ");
+        html = html.replace("&amp;", "&");
         html = html.trim();
         return html;
     }
 
     public static String extractDescriptionImage(String input) {
 
-        String extracedData = null;
+        String url = "";
 
-        Document document;
-        document = Jsoup.parse(input);
-        Elements tag = document.getElementsByTag("img");
-
-        for (Element el : tag) {
-            if (el.hasAttr("src")) {
-                extracedData = el.attr("src");
-            }
+        Document document = Jsoup.parse(input);
+        Elements img = document.select("img");
+        for (Element el : img) {
+            url = el.absUrl("src");
         }
 
-        return extracedData;
+        return url;
+
+    }
+
+    public static String extracMediaContentImage(String input) {
+
+        String url = "";
+
+        Log.e("LOGGING", "extracMediaContentImage: " + input);
+        return url;
 
     }
 

@@ -2,7 +2,14 @@ package org.armstrong.ika.FlexiReader;
 
 public class Article {
 
-    String id, title, link, description, pubDate, imageUrl, feedID, timestamp;
+    String id;
+    String title;
+    String link;
+    String description;
+    String pubDate;
+    String imageUrl;
+    String feedID;
+    String hash;
 
     public String getId() {
         return id;
@@ -48,7 +55,7 @@ public class Article {
         this.imageUrl = imageUrl;
     }
 
-    public String getFeedIDl() {
+    public String getFeedID() {
         return feedID;
     }
 
@@ -56,11 +63,12 @@ public class Article {
         this.feedID = feedID;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getHash() {
+        return hash;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setHash(String hash) {
+        this.hash = hash;
     }
+
 }

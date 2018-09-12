@@ -10,7 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "FlexiReader.db";
 
     // database version
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     // Table Namees
     public static final String TABLE_NAME = "feeds";
@@ -23,8 +23,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_PDATE = "pubDate";
     public static final String COLUMN_IMAGEURL = "imageUrl";
-    public static final String COLUMN_TIMESTAMP = "timestamp";
     public static final String COLUMN_FEEDID = "feedID";
+    public static final String COLUMN_HASH = "hash";
+    public static final String COLUMN_TIMESTAMP = "timestamp";
+
+    //public static final String TIME_FUNCTION =  '(strftime('%s', 'now'));
 
     // Create feeds
     private static final String CREATE_TABLE = "CREATE TABLE "
@@ -47,7 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_PDATE +" TEXT, "
             + COLUMN_IMAGEURL + " TEXT, "
             + COLUMN_FEEDID + " TEXT, "
-            + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP " // automatic insert
+            + COLUMN_HASH + " TEXT, "
+            + COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT (strftime('%s', 'now'))" // automatic insert
             +" )";
 
     public DatabaseHelper(Context context) {

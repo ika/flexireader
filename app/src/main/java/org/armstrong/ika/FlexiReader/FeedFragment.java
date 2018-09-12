@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FeedFragment extends Fragment {
 
@@ -44,6 +45,10 @@ public class FeedFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         listView.setAdapter(adapter);
+
+        String cnt = Integer.toString(dbManager.countRecords());
+        cnt = cnt + " items";
+        Toast.makeText(getActivity(), cnt, Toast.LENGTH_SHORT).show();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

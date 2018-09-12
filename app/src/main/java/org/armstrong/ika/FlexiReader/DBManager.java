@@ -11,6 +11,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.armstrong.ika.FlexiReader.DatabaseHelper.COLUMN_HASH;
+import static org.armstrong.ika.FlexiReader.DatabaseHelper.COLUMN_TIMESTAMP;
 import static org.armstrong.ika.FlexiReader.DatabaseHelper.TABLE_NAME;
 import static org.armstrong.ika.FlexiReader.DatabaseHelper.TABLE_NAME_CACHE;
 
@@ -53,10 +55,63 @@ public class DBManager {
         return true;
     }
 
+    public boolean deleteCacheByDate(String  hours) {
+
+        int h = Integer.parseInt(hours);
+
+        long unixTime = System.currentTimeMillis() / 1000L;
+        int limit = 60 * 60 * h; // 0 hours - clear cache
+        int offset = (int) (unixTime - limit);
+
+        //Log.e("LOGGING", "deleteCacheByDate UNIXTIME: " + unixTime);
+        //Log.e("LOGGING", "deleteCacheByDate OFFSET: " + offset);
+
+        String sql = "DELETE FROM " + TABLE_NAME_CACHE
+                + " WHERE " + COLUMN_TIMESTAMP + " < '" + offset + "'";
+        open();
+        database = dbHelper.getWritableDatabase();
+        database.execSQL(sql);
+        database.close();
+
+        return true;
+    }
+
+    public int countCacheByHash(String hash, String feedID) {
+
+        String sql = "SELECT * FROM " + TABLE_NAME_CACHE
+                + " WHERE " + COLUMN_HASH + " = '" + hash + "'"
+                + " AND " + COLUMN_FEEDID + " = '" + feedID + "'";
+        //open();
+        database = dbHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery(sql, null);
+
+        int cnt = cursor.getCount();
+
+        cursor.close();
+        //database.close();
+
+        return cnt;
+    }
+
     public int countCacheByFeed(String feedID) {
 
         String sql = "SELECT * FROM " + TABLE_NAME_CACHE
                 + " WHERE " + COLUMN_FEEDID + " = '" + feedID + "'";
+        open();
+        database = dbHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery(sql, null);
+
+        int cnt = cursor.getCount();
+
+        cursor.close();
+        database.close();
+
+        return cnt;
+    }
+
+    public int countCache() {
+
+        String sql = "SELECT * FROM " + TABLE_NAME_CACHE;
         open();
         database = dbHelper.getReadableDatabase();
         Cursor cursor = database.rawQuery(sql, null);
@@ -82,7 +137,7 @@ public class DBManager {
                 + COLUMN_FEEDID
                 + " FROM " + TABLE_NAME_CACHE
                 + " WHERE " + COLUMN_FEEDID + " = '" + feedID + "'"
-                + " ORDER BY " + COLUMN_ID + " ASC";
+                + " ORDER BY " + COLUMN_ID + " DESC";
 
         database = dbHelper.getReadableDatabase();
         Cursor cursor = database.rawQuery(sql, null);
@@ -109,10 +164,11 @@ public class DBManager {
         return values;
     }
 
-    public boolean insertCacheRecord(ArrayList<Article> articles) {
+    public boolean insertCacheRecord(ArrayList<Article> articles ) {
 
         open();
         database = dbHelper.getWritableDatabase();
+        
         ContentValues contentValue = new ContentValues();
 
         List<Article> allValues = articles;
@@ -124,9 +180,14 @@ public class DBManager {
             contentValue.put(COLUMN_DESCRIPTION, value.getDescription());
             contentValue.put(COLUMN_PDATE, value.getpubDate());
             contentValue.put(COLUMN_IMAGEURL, value.getImageUrl());
-            contentValue.put(COLUMN_FEEDID, value.getFeedIDl());
+            contentValue.put(COLUMN_FEEDID, value.getFeedID());
+            contentValue.put(COLUMN_HASH, value.getHash());
 
-            database.insert(TABLE_NAME_CACHE, null, contentValue);
+            int cnt = this.countCacheByHash(value.getHash(), value.getFeedID());
+
+            if(cnt < 1) {
+                long id = database.insert(TABLE_NAME_CACHE, null, contentValue);
+            }
         }
 
         database.close();
@@ -170,7 +231,9 @@ public class DBManager {
 
     public void updateRecord(ValuesModel value) {
 
-        String sql = "UPDATE " + TABLE_NAME + " SET "
+        String sql = "UPDATE "
+                + TABLE_NAME
+                + " SET "
                 + COLUMN_TITLE + " = '" + value.getTitle() + "', "
                 + COLUMN_LINK + " = '" + value.getLink()
                 + "' WHERE " + COLUMN_ID + " = '" + value.getId() + "'";
@@ -208,7 +271,12 @@ public class DBManager {
 
         ArrayList<ValuesModel> values = new ArrayList<ValuesModel>();
 
-        String sql = "SELECT " + COLUMN_ID + ", " + COLUMN_TITLE + ", " + COLUMN_LINK + ", " + COLUMN_FEEDID + " FROM " + TABLE_NAME;
+        String sql = "SELECT "
+                + COLUMN_ID + ", "
+                + COLUMN_TITLE + ", "
+                + COLUMN_LINK + ", "
+                + COLUMN_FEEDID
+                + " FROM " + TABLE_NAME;
 
         database = dbHelper.getReadableDatabase();
         Cursor cursor = database.rawQuery(sql, null);
@@ -237,7 +305,8 @@ public class DBManager {
 
         boolean state = true;
 
-        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = '" + value.getId() + "'";
+        String sql = "SELECT * FROM " + TABLE_NAME
+                + " WHERE " + COLUMN_ID + " = '" + value.getId() + "'";
 
         open();
         database = dbHelper.getReadableDatabase();
@@ -279,7 +348,14 @@ public class DBManager {
 
     public Cursor getOneRow() { // select first row
 
-        String sql = "SELECT " + COLUMN_ID + ", " + COLUMN_TITLE + ", " + COLUMN_LINK + ", " + COLUMN_FEEDID + " FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ID + " ASC LIMIT 1";
+        String sql = "SELECT "
+                + COLUMN_ID + ", "
+                + COLUMN_TITLE + ", "
+                + COLUMN_LINK + ", "
+                + COLUMN_FEEDID
+                + " FROM " + TABLE_NAME
+                + " ORDER BY " + COLUMN_ID
+                + " ASC LIMIT 1";
 
         open();
         database = dbHelper.getReadableDatabase();

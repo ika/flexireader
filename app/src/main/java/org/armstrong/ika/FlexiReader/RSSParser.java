@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -15,6 +18,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -28,10 +32,11 @@ public class RSSParser extends AsyncTask<Void, Void, Boolean> {
     private final InputStream inputStream;
     private final String feedID;
     private ArrayList<Article> articles = new ArrayList<>();
-    private static boolean prefImages = false;
+    private static boolean prefImages;
+    private static String prefCache;
     private final DBManager dbManager;
 
-    public RSSParser(Context context, InputStream inputStream, String feedID ) {
+    public RSSParser(Context context, InputStream inputStream, String feedID) {
         this.context = context;
         this.inputStream = inputStream;
         this.feedID = feedID;
@@ -46,12 +51,14 @@ public class RSSParser extends AsyncTask<Void, Void, Boolean> {
         SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
-        prefImages = sharedPrefs.getBoolean("prefImages", false);
+        prefImages = sharedPrefs.getBoolean("prefImagesSettings", false);
+        prefCache = sharedPrefs.getString("prefCacheSetting", "6");
 
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
+
         return this.parseRSS();
     }
 
@@ -63,7 +70,11 @@ public class RSSParser extends AsyncTask<Void, Void, Boolean> {
 
             swipeRefreshLayout.setRefreshing(false);
 
-            if(dbManager.deleteCacheByFeed(feedID)) {
+            if (dbManager.deleteCacheByDate(prefCache)) {
+
+                // reverse
+                Collections.reverse(articles);
+
                 // save
                 if (dbManager.insertCacheRecord(articles)) {
                     // display
@@ -113,41 +124,55 @@ public class RSSParser extends AsyncTask<Void, Void, Boolean> {
                         if (!isSiteMeta) {
                             if (tagName.equalsIgnoreCase("title")) {
                                 String ttl = tagValue.trim();
-                                article.setTitle(ttl);
+
+                                if (TextUtils.isEmpty(article.getTitle())) {
+                                    article.setTitle(ttl);
+                                }
+
+                                // Hash on title
+                                if (TextUtils.isEmpty(article.getHash())) {
+                                    ttl = ttl.replaceAll("[^a-zA-Z]", "");
+                                    String hash = new String(Hex.encodeHex(DigestUtils.md5(ttl)));
+                                    article.setHash(hash);
+                                }
 
                             } else if (tagName.equalsIgnoreCase("link")) {
-                                article.setLink(tagValue);
+                                if (TextUtils.isEmpty(article.getLink())) {
+                                    article.setLink(tagValue);
+                                }
+
 
                             } else if (tagName.equalsIgnoreCase("description")) {
 
-                                //EXTRACT IMAGE FROM DESCRIPTION
-                                if (prefImages) {
-                                    article.setImageUrl(HTMLUtils.extractDescriptionImage(tagValue));
-                                } else {
-                                    article.setImageUrl(HTMLUtils.extractDescriptionImage(""));
+                                if (TextUtils.isEmpty(article.getImageUrl())) {
+                                    if (prefImages) {
+                                        article.setImageUrl(HTMLUtils.extractDescriptionImage(tagValue));
+                                    } else {
+                                        article.setImageUrl("");
+                                    }
                                 }
 
-                                // extract text
-                                article.setDescription(HTMLUtils.StripHtml(tagValue));
+                                if (TextUtils.isEmpty(article.getDescription())) {
+                                    article.setDescription(HTMLUtils.StripHtml(tagValue));
+                                }
 
-                                // feedID
-                                article.setFeedID(feedID);
-
-                                // ""("LOGGING", "DESC" + HTMLUtils.StripHtml(desc));
 
                             } else if (tagName.equalsIgnoreCase("pubDate")) {
+                                if (TextUtils.isEmpty(article.getpubDate())) {
+                                    article.setpubDate(tagValue);
+                                }
 
-                                try {
-                                    SimpleDateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
-                                    Date pDate = df.parse(tagValue);
-                                    article.setpubDate(DateUtils.getDateDifference(pDate));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
+                            } else if (tagName.equalsIgnoreCase("dc:date")) {
+                                if (TextUtils.isEmpty(article.getpubDate())) {
+                                    article.setpubDate(tagValue);
                                 }
                             }
                         }
 
                         if (tagName.equalsIgnoreCase("item")) {
+                            // feedID
+                            article.setFeedID(feedID);
+
                             articles.add(article);
                             isSiteMeta = true;
                         }

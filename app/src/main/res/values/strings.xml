@@ -40,9 +40,6 @@
     <string name="feeds_warning">Add a news feed</string>
     <string name="feeds_modify_record">Modify Feed</string>
 
-    <!--<string name="fab1_text">ADD</string>-->
-    <!--<string name="fab2_text">IMP</string>-->
-
     <!-- Strings related to Settings -->
     <string name="settings_name">Settings</string>
     <string name="pref_image_title">Image Settings</string>
@@ -50,18 +47,20 @@
     <string name="pref_image_summary_on">Images are Enabled</string>
     <string name="pref_image_summary_off">Images are Disabled</string>
 
+    <string name="pref_cache_title">Cache Settings</string>
+    <string name="pref_cache_sub_title">Retain news items in hours</string>
+    <string name="pref_cache_dialog_title">Zero deletes cache</string>
 
-    <!--<string name="pref_view_settings_title">Viewer Settings</string>-->
+    <string name="pref_cache_total">Cache Total</string>
+    <string name="pref_cache_entries">Total entries in cache</string>
 
-
-    <!--<string-array name="pref_view_settings_list_titles">-->
-        <!--<item>Show Images (slower)</item>-->
-        <!--<item>Text Only (faster)</item>-->
-    <!--</string-array>-->
-
-    <!--<string-array name="pref_example_list_values">-->
-        <!--<item>1</item>-->
-        <!--<item>0</item>-->
-    <!--</string-array>-->
+    <string-array name="pref_cache_list_values">
+        <item>0</item>
+        <item>6</item>
+        <item>12</item>
+        <item>18</item>
+        <item>24</item>
+        <item>36</item>
+    </string-array>
 
 </resources>
