@@ -63,9 +63,6 @@ public class DBManager {
         int limit = 60 * 60 * h; // 0 hours - clear cache
         int offset = (int) (unixTime - limit);
 
-        //Log.e("LOGGING", "deleteCacheByDate UNIXTIME: " + unixTime);
-        //Log.e("LOGGING", "deleteCacheByDate OFFSET: " + offset);
-
         String sql = "DELETE FROM " + TABLE_NAME_CACHE
                 + " WHERE " + COLUMN_TIMESTAMP + " < '" + offset + "'";
         open();

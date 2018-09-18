@@ -1,8 +1,10 @@
 package org.armstrong.ika.FlexiReader;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,6 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
     private TextView hiddenID;
     private EditText nameEditText;
     private EditText linkEditText;
-    private Button button;
     private View view;
     private Button updateBtn, deleteBtn;
     private DBManager dbManager;
@@ -93,17 +94,36 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
 
             case R.id.btn_delete:
 
-                String did = hiddenID.getText().toString();
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete")
+                        .setMessage("Do you want to delete this feed?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                ValuesModel value = new ValuesModel();
-                value.setId(did);
+                                String did = hiddenID.getText().toString();
 
-                dbManager.deleteRecord(value);
+                                ValuesModel value = new ValuesModel();
+                                value.setId(did);
+
+                                dbManager.deleteRecord(value);
+
+                                returnToFeeds();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                returnToFeeds();
+                            }
+                        })
+                        .create()
+                        .show();
 
                 break;
         }
 
-        this.returnToFeeds();
+
     }
 
     private void returnToFeeds() {

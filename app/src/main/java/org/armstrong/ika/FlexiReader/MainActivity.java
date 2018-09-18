@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CheckableImageButton;
 import android.support.v7.app.ActionBar;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,15 +23,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.ZoomButton;
 
 import java.util.List;
-
 
 
 public class MainActivity extends AboutActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,20 +46,15 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
     // https://www.androidhive.info/2016/01/android-working-with-recycler-view/
     private List<Article> articles;
     private RecyclerView recyclerView;
-    private CustomAdapter customAdapter;
 
     private static String savedID = "0"; // _id
     private static String urlAddress = null; // link
-    private static String savedTitle = ""; // title
     private static String feedID = ""; // feedID
 
     public static SwipeRefreshLayout swipeRefreshLayout;
 
-    //private final Context context;
-    private static SharedPreferences sharedPrefs;
-    private static String saveColor;
+    private DBManager dbManager;
 
-    DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,7 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
 
         // restore preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        saveColor = sharedPrefs.getString("prefColorSetting", "-41659");
+        String saveColor = sharedPrefs.getString("prefColorSetting", "-41659");
 
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -111,6 +110,7 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
         ValuesModel values = new ValuesModel();
         values.setId(savedID);
 
+        String savedTitle = "";
         if (dbManager.checkIDexists(values)) { // does ID exist?
 
             Cursor cursor = dbManager.getRecordById(values);
@@ -179,13 +179,6 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.about, menu);
-        return true;
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int menuID = item.getItemId();
@@ -231,35 +224,37 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
     public void displayList() {
 
         articles = dbManager.getAllCacheRecords(feedID);
-        customAdapter = new CustomAdapter(MainActivity.this, articles);
+        CustomAdapter customAdapter = new CustomAdapter(MainActivity.this, articles);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(customAdapter);
 
         // row click listener
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
+//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//
+//                Log.e(TAG, "POSITION: " + position );
 
-                Article article = articles.get(position);
-                String url = article.getLink();
-                if (URLUtil.isValidUrl(url)) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                } else {
-                    String txt = "No link provided";
-                    makeToast(txt);
-                }
+//                Article article = articles.get(position);
+//                String url = article.getLink();
+//                if (URLUtil.isValidUrl(url)) {
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse(url));
+//                    startActivity(i);
+//                } else {
+//                    String txt = "No link provided";
+//                    makeToast(txt);
+//                }
 
-            }
+//           }
 
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+//            @Override
+//            public void onLongClick(View view, int position) {
+//
+//            }
+//        }));
 
         String cnt = Integer.toString(dbManager.countCacheByFeed(feedID));
         cnt = cnt + " items";
@@ -282,14 +277,14 @@ public class MainActivity extends AboutActivity implements NavigationView.OnNavi
 
         String dbid = Integer.toString(menuID);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putString("dbid", dbid);
         editor.apply();
 
     }
 
-    private void makeToast(String txt){
+    private void makeToast(String txt) {
         Toast.makeText(this, txt, Toast.LENGTH_SHORT).show();
     }
 

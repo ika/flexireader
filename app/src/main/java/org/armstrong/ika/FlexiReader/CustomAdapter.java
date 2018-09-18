@@ -4,12 +4,17 @@ package org.armstrong.ika.FlexiReader;
 // https://www.stacktips.com/tutorials/android/android-recyclerview-example
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -49,8 +54,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        protected ImageButton imageButton;
         protected ImageView postImg;
         protected TextView postTitle;
         protected TextView postDesc;
@@ -63,7 +69,53 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
             this.postDesc = view.findViewById(id.descTxt);
             this.postDate = view.findViewById(id.dateTxt);
             this.postImg = view.findViewById(id.articleImage);
+            this.imageButton = view.findViewById(id.imageButton);
+
+            imageButton.setOnClickListener(this);
+            postDesc.setOnClickListener(this);
+            postTitle.setOnClickListener(this);
+            postImg.setOnClickListener(this);
+
         }
+
+        public void onClick(View v) {
+
+            if (v.getTag().toString().equals("imgButtonTag")) {
+
+                int position = getAdapterPosition();
+
+                Article article = articles.get(position);
+              //  String title = article.getTitle();
+                String link = article.getLink();
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+              //  sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, link);
+                sendIntent.setType("text/plain");
+                sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                context.startActivity(Intent.createChooser(sendIntent,"Share"));
+
+            } else if (v.getTag().toString().equals("descriptionTag")
+                    || v.getTag().toString().equals("titleTextTag")
+                    || v.getTag().toString().equals("imageViewTag")) {
+
+                int position = getAdapterPosition();
+
+                Article article = articles.get(position);
+                String url = article.getLink();
+
+                if (URLUtil.isValidUrl(url)) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    context.startActivity(i);
+                } else {
+                    Toast.makeText(v.getContext(), "No link provided!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+
     }
 
     @Override

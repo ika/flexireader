@@ -1,61 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+    android:layout_marginBottom="0dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
     android:orientation="horizontal"
     card_view:cardCornerRadius="5dp"
-    card_view:cardElevation="5dp" >
+    card_view:cardElevation="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/feedTxt"
+            android:background="#ffffff"
+            android:src="@drawable/ic_more_horiz_black_24dp"
+            android:tag="imgButtonTag" />
 
         <TextView
             android:id="@+id/feedTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="12dp"
             android:text="@string/text_feed"
-            android:textSize="10sp"
-            android:textStyle="italic" />
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
+
 
         <ImageView
             android:id="@+id/articleImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/feedTxt"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:contentDescription="@string/image_description"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:tag="imageViewTag" />
 
         <TextView
             android:id="@+id/titleTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/articleImage"
-            android:paddingBottom="10dp"
+            android:layout_marginBottom="8dp"
+            android:tag="titleTextTag"
             android:text="@string/text_title"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/descTxt"
+            android:tag="descriptionTag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/titleTxt"
@@ -70,7 +84,8 @@
             android:layout_below="@+id/descTxt"
             android:text="@string/text_date"
             android:textSize="12sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:ignore="NotSibling" />
 
     </RelativeLayout>
 

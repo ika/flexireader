@@ -13,7 +13,7 @@ public class PicassoClient {
         android.view.ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
 
         if (TextUtils.isEmpty(imageUrl)) {
-            layoutParams.height = 0;
+            layoutParams.height = 8;
             imageView.setImageDrawable(null);
         } else {
             layoutParams.height = 250;

@@ -15,23 +15,19 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Locale;
 
 import static org.armstrong.ika.FlexiReader.MainActivity.swipeRefreshLayout;
 
 public class RSSParser extends AsyncTask<Void, Void, Boolean> {
 
-    String TAG = "LOGGING";
+    final String TAG = "LOGGING";
 
     private final Context context;
     private final InputStream inputStream;
     private final String feedID;
-    private ArrayList<Article> articles = new ArrayList<>();
+    private final ArrayList<Article> articles = new ArrayList<>();
     private static boolean prefImages;
     private static String prefCache;
     private final DBManager dbManager;
@@ -47,12 +43,13 @@ public class RSSParser extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
         // get user preferences
         SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
         prefImages = sharedPrefs.getBoolean("prefImagesSettings", false);
-        prefCache = sharedPrefs.getString("prefCacheSetting", "6");
+        prefCache = sharedPrefs.getString("prefCacheSetting", "12");
 
     }
 
