@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/default_preview_height"
     android:layout_height="@dimen/default_preview_height"
     android:background="@android:color/transparent"
@@ -7,6 +8,6 @@
     <ImageView
         android:layout_width="@dimen/default_preview_image_height"
         android:layout_height="@dimen/default_preview_image_height"
-        android:src="@android:color/transparent"
+        app:srcCompat="@android:color/transparent"
         android:id="@+id/image_preview"/>
 </LinearLayout>
