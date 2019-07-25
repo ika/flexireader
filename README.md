@@ -1,3 +1,5 @@
+#FlexiReader
+
 FlexiReader is a fast, safe and secure RSS news reader.
 
 There is no advertising, no login required and no personal data is recorded.
