@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity
 
         sharedPreferencesEditor = sharedPreferences.edit();
         sharedPreferencesEditor.putInt("dbid", menuID);
-        sharedPreferencesEditor.commit();
+        sharedPreferencesEditor.apply();
 
     }
 
