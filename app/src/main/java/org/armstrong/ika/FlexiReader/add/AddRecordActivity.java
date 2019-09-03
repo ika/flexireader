@@ -24,6 +24,8 @@ public class AddRecordActivity extends AppCompatActivity {
 
     private ActionBar ab;
 
+    String textSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,7 @@ public class AddRecordActivity extends AppCompatActivity {
         // read saved preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
+        textSize = sharedPreferences.getString("textSize", "16");
 
         Toolbar toolbar = findViewById(R.id.add_toolbar);
         setSupportActionBar(toolbar);
@@ -49,9 +52,9 @@ public class AddRecordActivity extends AppCompatActivity {
 
         // Action Bar Text One
         TextView textOne = toolbar.findViewById(R.id.action_bar_title);
-        textOne.setText("Add Feed");
+        textOne.setText(getString(R.string.add_feed));
         textOne.setTextColor(Color.parseColor("#FFFFFF"));
-        textOne.setTextSize(18);
+        textOne.setTextSize(Integer.parseInt(textSize) + 4);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.add_frame_layout, AddRecordFragment.newInstance())

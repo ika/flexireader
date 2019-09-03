@@ -1,4 +1,4 @@
-package org.armstrong.ika.FlexiReader.more;
+package org.armstrong.ika.FlexiReader.list;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,11 +9,6 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import org.armstrong.ika.FlexiReader.MainActivity;
-import org.armstrong.ika.FlexiReader.R;
-import org.armstrong.ika.FlexiReader.app.Utils;
-import org.armstrong.ika.FlexiReader.list.ListActivity;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,9 +16,14 @@ import androidx.appcompat.widget.Toolbar;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
-public class MoreActivity extends AppCompatActivity {
+import org.armstrong.ika.FlexiReader.MainActivity;
+import org.armstrong.ika.FlexiReader.R;
+import org.armstrong.ika.FlexiReader.app.Utils;
+import org.armstrong.ika.FlexiReader.more.MoreActivity;
 
-    public static MoreActivity instance;
+public class ListActivity extends AppCompatActivity {
+
+    public static ListActivity instance;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharedPreferencesEditor;
@@ -38,7 +38,7 @@ public class MoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.more_activity);
+        setContentView(R.layout.list_activity);
 
         instance = this;
 
@@ -63,7 +63,7 @@ public class MoreActivity extends AppCompatActivity {
 
         // Action Bar Text One
         TextView textOne = toolbar.findViewById(R.id.action_bar_title);
-        textOne.setText(getString(R.string.more));
+        textOne.setText(getString(R.string.list));
         textOne.setTextColor(Color.parseColor("#FFFFFF"));
         textOne.setTextSize(Integer.parseInt(textSize) + 4);
 
@@ -113,7 +113,7 @@ public class MoreActivity extends AppCompatActivity {
 //        bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
 
         // Set current item programmatically
-        bottomNavigation.setCurrentItem(2);
+        bottomNavigation.setCurrentItem(0);
 
         // Quick return animation
         bottomNavigation.setBehaviorTranslationEnabled(false);
@@ -125,17 +125,17 @@ public class MoreActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0:
-                        Intent listActivity = new Intent(getApplicationContext(), ListActivity.class);
-                        startActivity(listActivity);
+                        if (!wasSelected) {
+                            Utils.makeToast(getApplicationContext(), "list");
+                        }
                         break;
                     case 1:
                         Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(mainActivity);
                         break;
                     case 2:
-                        if (!wasSelected) {
-                            Utils.makeToast(getApplicationContext(), "more");
-                        }
+                        Intent moreActivity = new Intent(getApplicationContext(), MoreActivity.class);
+                        startActivity(moreActivity);
                         break;
                 }
 
@@ -145,13 +145,13 @@ public class MoreActivity extends AppCompatActivity {
 
         // Fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.more_frame_layout, MoreFragment.newInstance())
+                .replace(R.id.list_frame_layout, ListFragment.newInstance())
                 .commitNow();
 
 
     }
 
-    public static MoreActivity getInstance() {
+    public static ListActivity getInstance() {
         return instance;
     }
 
@@ -181,7 +181,7 @@ public class MoreActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(MoreActivity.this, MainActivity.class);
+        Intent intent = new Intent(ListActivity.this, MainActivity.class);
         startActivity(intent);
     }
 }

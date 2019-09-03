@@ -9,11 +9,14 @@ import androidx.room.Query;
 @Dao
 public interface FeedsDoa {
 
-    @Query("SELECT * FROM feeds ORDER BY id DESC")
+    @Query("SELECT * FROM feeds ORDER BY time DESC")
     List<FeedsEntities> getFeedsRecords();
 
-    @Query("UPDATE feeds SET title=:title, link=:link WHERE id=:id")
-    void updateRecord(String title, String link, int id);
+    @Query("UPDATE feeds SET title=:title, link=:link, time=:time WHERE id=:id")
+    void updateRecord(String title, String link, int id, long time);
+
+    @Query("UPDATE feeds SET time=:time WHERE id=:id")
+    void updateTime(long time, int id);
 
     @Query("DELETE FROM feeds WHERE id=:id")
     void deleteRecord(int id);

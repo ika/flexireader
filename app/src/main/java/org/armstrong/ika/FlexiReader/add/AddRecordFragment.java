@@ -81,22 +81,21 @@ public class AddRecordFragment extends Fragment implements View.OnClickListener 
                 final String link = linkEditText.getText().toString();
 
                 if (title == null || title.isEmpty()) {
-                    String text = getString(R.string.feeds_add_name);
-                    showError(text);
+                    showError(getString(R.string.feeds_add_name));
                 } else if (link == null || link.isEmpty()) {
-                    String text = getString(R.string.feeds_add_link);
-                    showError(text);
+                    showError(getString(R.string.feeds_add_link));
                 } else if (!URLUtil.isValidUrl(link)) {
-                    String text = getString(R.string.feeds_add_link_error);
-                    showError(text);
+                    showError(getString(R.string.feeds_add_link_error));
                 } else {
 
                     String feedID = UUID.randomUUID().toString();
+                    long seconds = System.currentTimeMillis() / 1000l;
 
                     FeedsEntities feedsEntities = new FeedsEntities();
                     feedsEntities.setTitle(title);
                     feedsEntities.setLink(link);
                     feedsEntities.setFeedId(feedID);
+                    feedsEntities.setTime(seconds);
 
                     feedsDatabase.feedsDoa().insertFeed(feedsEntities);
 
@@ -111,9 +110,9 @@ public class AddRecordFragment extends Fragment implements View.OnClickListener 
     private void showError(String txt) {
 
         new AlertDialog.Builder(getContext())
-                .setTitle("Error!")
+                .setTitle(getString(R.string.error))
                 .setMessage(txt)
-                .setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // do nothing

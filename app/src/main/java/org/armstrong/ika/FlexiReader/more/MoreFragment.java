@@ -63,12 +63,19 @@ public class MoreFragment extends Fragment {
         instance = this;
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        textSize = sharedPreferences.getString("textSize", "14");
+        textSize = sharedPreferences.getString("textSize", "16");
 
         currentBackgroundColor = Integer.parseInt(sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark)));
 
-        String items[] = {"Edit News Feeds", "Colour Picker Style", "Colour Picker","Images On/Off",
-                "Text Size", "Share FlexiReader","About"};
+        String items[] = {
+                getString(R.string.edit_news),
+                getString(R.string.color_picker),
+                getString(R.string.color_picker_style),
+                getString(R.string.images),
+                getString(R.string.text_size),
+                getString(R.string.share),
+                getString(R.string.about)
+        };
 
         for (String i : items) {
             moreModel = new MoreModel();
@@ -114,23 +121,13 @@ public class MoreFragment extends Fragment {
             public void onClick(View view, int position) {
 
                 switch (position) {
+
                     case 0: // FeedsEntities
                         Intent feedActivity = new Intent(getContext(), FeedActivity.class);
                         startActivity(feedActivity);
                         break;
-                    case 1: // Color Picker Style
-                        final MoreColorPickerSheet moreColorPickerSheet = new MoreColorPickerSheet();
-                        moreColorPickerSheet.show(getActivity().getSupportFragmentManager(), "more color picker sheet");
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                moreColorPickerSheet.dismiss();
-                            }
-                        }, 10000);
-
-                        break;
-                    case 2: // color picker
+                    case 1: // color picker
 
                         ws = sharedPreferences.getString("wheelStyle", "0");
 
@@ -163,7 +160,7 @@ public class MoreFragment extends Fragment {
                                         //Utils.makeToast(getContext(),"onColorSelected: 0x" + Integer.toHexString(selectedColor));
                                     }
                                 })
-                                .setPositiveButton("ok", new ColorPickerClickListener() {
+                                .setPositiveButton(getString(R.string.okay), new ColorPickerClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
 
@@ -171,7 +168,7 @@ public class MoreFragment extends Fragment {
 
                                     }
                                 })
-                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // do nothing
@@ -183,37 +180,53 @@ public class MoreFragment extends Fragment {
                                 .show();
                         break;
 
+                    case 2: // Color Picker Style
+
+                        final MoreColorPickerSheet moreColorPickerSheet = new MoreColorPickerSheet();
+                        moreColorPickerSheet.show(getActivity().getSupportFragmentManager(), "moreColorPickerSheet");
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                moreColorPickerSheet.dismiss();
+                            }
+                        }, 5000);
+
+                        break;
+
                     case 3: //Images On/Off
 
                         final MoreImageSheet moreImageSheet = new MoreImageSheet();
-                        moreImageSheet.show(getActivity().getSupportFragmentManager(), "more image sheet");
+                        moreImageSheet.show(getActivity().getSupportFragmentManager(), "moreImageSheet");
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 moreImageSheet.dismiss();
                             }
-                        }, 10000);
+                        }, 5000);
 
                         break;
 
                     case 4: // text size
                         final MoreSizeSheet moreSizeSheet = new MoreSizeSheet();
-                        moreSizeSheet.show(getActivity().getSupportFragmentManager(), "more size sheet");
+                        moreSizeSheet.show(getActivity().getSupportFragmentManager(), "moreSizeSheet");
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 moreSizeSheet.dismiss();
                             }
-                        }, 10000);
+                        }, 5000);
 
                         break;
 
                     case 5: // share FlexiReader
-                        String txt = getString(R.string.shareFRtext)
-                                + "\n\n"
-                                + getString(R.string.shareFRlink);
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(getString(R.string.shareFRtext));
+                        stringBuilder.append("\n\n");
+                        stringBuilder.append(getString(R.string.shareFRlink));
 
                         Intent shareIntent = new Intent();
 
@@ -221,9 +234,9 @@ public class MoreFragment extends Fragment {
                         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         shareIntent.setType("text/plain");
                         //shareIntent.putExtra(Intent.EXTRA_SUBJECT, subj);
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, txt);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
 
-                        Intent intent = Intent.createChooser(shareIntent, "Share FlexiReader with:");
+                        Intent intent = Intent.createChooser(shareIntent, getString(R.string.share_with));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         break;
@@ -256,9 +269,9 @@ public class MoreFragment extends Fragment {
 
     }
 
-    public void updateRecyclerView(){
+    public void updateRecyclerView() {
 
-        textSize = sharedPreferences.getString("textSize", "14");
+        textSize = sharedPreferences.getString("textSize", "16");
         moreFragmentAdapter = new MoreFragmentAdapter(moreItems, textSize);
         recyclerView.setAdapter(moreFragmentAdapter);
 

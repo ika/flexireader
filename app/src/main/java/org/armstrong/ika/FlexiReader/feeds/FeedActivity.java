@@ -37,7 +37,7 @@ public class FeedActivity extends AppCompatActivity {
         // read saved preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
-        textSize = sharedPreferences.getString("textSize", "14");
+        textSize = sharedPreferences.getString("textSize", "16");
 
         Toolbar toolbar = findViewById(R.id.feed_toolbar);
         setSupportActionBar(toolbar);
@@ -54,9 +54,9 @@ public class FeedActivity extends AppCompatActivity {
 
         // Action Bar Text One
         TextView textOne = toolbar.findViewById(R.id.action_bar_title);
-        textOne.setText("News Feeds");
+        textOne.setText(getString(R.string.news_feeds));
         textOne.setTextColor(Color.parseColor("#FFFFFF"));
-        textOne.setTextSize(18);
+        textOne.setTextSize(Integer.parseInt(textSize) + 4);
 
         // Floating Action Button
         FloatingActionButton fab1 = findViewById(R.id.fab1);
@@ -89,11 +89,6 @@ public class FeedActivity extends AppCompatActivity {
         }
         return true;
     }
-
-//    public void refreshFeeds() {
-//        finish();
-//        startActivity(getIntent());
-//    }
 
     @Override
     public void onBackPressed() {

@@ -51,7 +51,7 @@ public class FeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         feedsDatabase = FeedsDatabase.getInstance(getContext());
-        textSize = getArguments().getString("textSize", "14");
+        textSize = getArguments().getString("textSize", "16");
     }
 
     @Override
@@ -85,7 +85,7 @@ public class FeedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         String cnt = Integer.toString(feedsDatabase.feedsDoa().countRecords());
-        cnt = cnt + " items";
+        cnt = cnt + " " + getString(R.string.items);
 
         Utils.makeToast(getContext(), cnt);
 

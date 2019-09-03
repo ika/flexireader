@@ -63,7 +63,7 @@ public class MainFragment extends Fragment {
 
         feedID = getArguments().getString("feedID", "");
         urlAddress = getArguments().getString("urlAddress", "");
-        textSize = getArguments().getString("textSize", "14");
+        textSize = getArguments().getString("textSize", "16");
 
         cacheDatabase = CacheDatabase.getInstance(getContext());
 
@@ -139,7 +139,7 @@ public class MainFragment extends Fragment {
                     intent.setData(Uri.parse(link));
                     getActivity().startActivity(intent);
                 } else {
-                    Utils.makeToast(getContext(),"Invalid URL");
+                    Utils.makeToast(getContext(),getString(R.string.url_invalid));
                 }
 
 
@@ -158,7 +158,7 @@ public class MainFragment extends Fragment {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, link);
                 sendIntent.setType("text/plain");
                 sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                getActivity().startActivity(Intent.createChooser(sendIntent,"Share"));
+                getActivity().startActivity(Intent.createChooser(sendIntent,getString(R.string.share_title)));
 
             }
 
@@ -202,11 +202,11 @@ public class MainFragment extends Fragment {
 
             } else {
 
-                Utils.makeToast(getContext(), "urlAddress is empty");
+                Utils.makeToast(getContext(), getString(R.string.url_empty));
             }
         } else {
 
-            Utils.makeToast(getContext(), "feedID is empty");
+            Utils.makeToast(getContext(), getString(R.string.feed_empty));
         }
 
     }

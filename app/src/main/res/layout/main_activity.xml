@@ -8,27 +8,39 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+            <include layout="@layout/main_appbar" />
+
+            <include layout="@layout/main_content" />
+
+<!--    <androidx.drawerlayout.widget.DrawerLayout-->
+<!--        android:id="@+id/drawer_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        tools:openDrawer="start">-->
+
+<!--        <include layout="@layout/main_appbar" />-->
+
+<!--        <include layout="@layout/main_content" />-->
+
+<!--        <com.google.android.material.navigation.NavigationView-->
+<!--            android:id="@+id/nav_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:fitsSystemWindows="true"-->
+<!--            app:headerLayout="@layout/nav_header"-->
+<!--            app:menu="@menu/activity_main_drawer" />-->
+
+<!--    </androidx.drawerlayout.widget.DrawerLayout>-->
+
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        android:layout_height="@dimen/bottom_navigation_height"
+        android:layout_gravity="bottom">
 
-        <include layout="@layout/main_appbar" />
-
-        <include layout="@layout/main_content" />
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:headerLayout="@layout/nav_header"
-            app:menu="@menu/activity_main_drawer" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </com.aurelhubert.ahbottomnavigation.AHBottomNavigation>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

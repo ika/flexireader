@@ -12,8 +12,6 @@ import com.squareup.picasso.Picasso;
 
 import org.armstrong.ika.FlexiReader.R;
 
-import androidx.appcompat.app.AppCompatDelegate;
-
 public class PicassoClient {
 
     private static SharedPreferences sharedPreferences;
@@ -45,7 +43,7 @@ public class PicassoClient {
 
                 layoutParams.height = withPicture;
 
-                Picasso.with(context).load(imageUrl)
+                Picasso.get().load(imageUrl)
                         .error(placeholderList.getCurrent())
                         .placeholder(placeholderList.getCurrent())
                         .into(imageView);

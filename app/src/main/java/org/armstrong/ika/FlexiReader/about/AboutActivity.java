@@ -21,6 +21,7 @@ public class AboutActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
     private String color;
+    String textSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class AboutActivity extends AppCompatActivity {
         // read saved preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
+        textSize = sharedPreferences.getString("textSize", "16");
 
         // Toolbar layout
         Toolbar toolbar = findViewById(R.id.about_toolbar);
@@ -48,9 +50,9 @@ public class AboutActivity extends AppCompatActivity {
 
         // Action Bar Text One
         TextView textOne = toolbar.findViewById(R.id.action_bar_title);
-        textOne.setText("About");
+        textOne.setText(getString(R.string.about));
         textOne.setTextColor(Color.parseColor("#FFFFFF"));
-        textOne.setTextSize(18);
+        textOne.setTextSize(Integer.parseInt(textSize) + 4);
 
 
         getSupportFragmentManager().beginTransaction()

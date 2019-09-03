@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MoreSheetAdapter extends RecyclerView.Adapter<MoreSheetAdapter.CustomViewHolder> {
 
         private List<MoreModel> menuList;
+        private String textSize;
 
-        public MoreSheetAdapter(List<MoreModel> menuList) {
+        public MoreSheetAdapter(List<MoreModel> menuList, String textSize) {
             this.menuList = menuList;
+            this.textSize = textSize;
 
         }
 
@@ -41,6 +43,7 @@ public class MoreSheetAdapter extends RecyclerView.Adapter<MoreSheetAdapter.Cust
             boolean status = (a == 1) ? true : false;
 
             customViewHolder.menuItem.setText(moreModel.getMoreText());
+            customViewHolder.menuItem.setTextSize(Integer.parseInt(textSize));
             customViewHolder.itemSwitch.setChecked(status);
 
         }

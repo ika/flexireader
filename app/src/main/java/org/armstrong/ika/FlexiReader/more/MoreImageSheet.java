@@ -39,6 +39,8 @@ public class MoreImageSheet extends BottomSheetDialogFragment {
 
     private String prefImages;
 
+    private String textSize;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,8 +49,9 @@ public class MoreImageSheet extends BottomSheetDialogFragment {
         // get user preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         prefImages = sharedPreferences.getString("prefImages", "1");
+        textSize = sharedPreferences.getString("textSize", "16");
 
-        String items[] = {"Images On/Off"};
+        String items[] = {getString(R.string.images)};
 
         for (String i : items) {
             moreModel = new MoreModel();
@@ -72,7 +75,7 @@ public class MoreImageSheet extends BottomSheetDialogFragment {
 
         recyclerView = view.findViewById(R.id.moreImageSheetRecyclerView);
 
-        moreSheetAdapter = new MoreSheetAdapter(menuItems);
+        moreSheetAdapter = new MoreSheetAdapter(menuItems, textSize);
 
         recyclerView.setHasFixedSize(true);
 

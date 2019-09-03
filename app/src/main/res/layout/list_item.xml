@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/moreItem"
+        android:id="@+id/listItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14dp" />

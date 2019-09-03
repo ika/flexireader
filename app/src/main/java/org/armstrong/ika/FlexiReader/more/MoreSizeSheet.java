@@ -42,8 +42,8 @@ public class MoreSizeSheet extends BottomSheetDialogFragment {
         super.onCreate(savedInstanceState);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        textSize = sharedPreferences.getString("textSize", "14");
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
+        textSize = sharedPreferences.getString("textSize", "16");
 
     }
 
@@ -52,8 +52,14 @@ public class MoreSizeSheet extends BottomSheetDialogFragment {
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
 
-        String size[] = {"14", "16", "18", "20"};
-        String items[] = {"Small", "Medium", "Large", "XLarge"};
+        String size[] = {"16", "18", "20", "22"};
+
+        String items[] = {
+                getString(R.string.small),
+                getString(R.string.medium),
+                getString(R.string.large),
+                getString(R.string.xlarge)
+        };
 
         int x = 0;
         for (String i : items) {

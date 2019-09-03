@@ -21,10 +21,6 @@ public class CacheEntities {
     private String imageUrl;
     @ColumnInfo(name = "feedId")
     private String feedId;
-//    @ColumnInfo(name = "hash")
-//    private String hash;
-//    @ColumnInfo(name = "timestamp")
-//    private int timestamp;
 
     public int getId(){return id;}
     public void setId(int id) {this.id = id;}
@@ -47,10 +43,5 @@ public class CacheEntities {
     public String getFeedId() {return feedId;}
     public void setFeedId(String feedId) {this.feedId = feedId;}
 
-//    public String getHash(){return hash;}
-//    public void setHash(String hash) {this.hash = hash;}
-
-//    public int getTimestamp() {return timestamp;}
-//    public void setTimestamp(int timestamp) {this.timestamp = timestamp;}
 
 }

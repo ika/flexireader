@@ -28,6 +28,36 @@
 
     <string name="hint_reference">name</string>
     <string name="hint_note">link</string>
+    <string name="url_empty">URL address is empty</string>
+    <string name="feed_empty">FeedID is empty</string>
+    <string name="url_invalid">URL is invalid</string>
+    <string name="share_title">Share</string>
+    <string name="blank"></string>
+    <string name="about">About</string>
+    <string name="add_feed">Add Feed</string>
+    <string name="error">Error!</string>
+    <string name="okay">OKAY</string>
+    <string name="news_feeds">News Feeds</string>
+    <string name="items">items</string>
+    <string name="list">List</string>
+    <string name="modify_feed">Modify Feed</string>
+    <string name="delete">Delete</string>
+    <string name="sure">Are you sure?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="more">More</string>
+    <string name="edit_news">Edit News Feeds</string>
+    <string name="color_picker">Colour Picker</string>
+    <string name="color_picker_style">Colour Picker Style</string>
+    <string name="images">Images On/Off</string>
+    <string name="text_size">Text Size</string>
+    <string name="share">Share FlexiReader</string>
+    <string name="cancel">CANCEL</string>
+    <string name="share_with">Share FlexiReader with:</string>
+    <string name="small">Small</string>
+    <string name="large">Large</string>
+    <string name="medium">Medium</string>
+    <string name="xlarge">Xlarge</string>
 
 
 </resources>

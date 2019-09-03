@@ -3,8 +3,6 @@ package org.armstrong.ika.FlexiReader.app;
 import android.content.Context;
 import android.widget.Toast;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +10,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
 // https://github.com/eugenp/tutorials/tree/master/core-java-security
 

@@ -93,22 +93,21 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
 
             case R.id.btn_update:
 
+                long seconds = System.currentTimeMillis() / 1000l;
+
                 //String id = hiddenID.getText().toString();
                 String title = nameEditText.getText().toString();
                 String link = linkEditText.getText().toString();
 
                 if (title == null || title.isEmpty()) {
-                    String text = getString(R.string.feeds_add_name);
-                    showError(text);
+                    showError(getString(R.string.feeds_add_name));
                 } else if (link == null || link.isEmpty()) {
-                    String text = getString(R.string.feeds_add_link);
-                    showError(text);
+                    showError(getString(R.string.feeds_add_link));
                 } else if (!URLUtil.isValidUrl(link)) {
-                    String text = getString(R.string.feeds_add_link_error);
-                    showError(text);
+                    showError(getString(R.string.feeds_add_link_error));
                 } else {
 
-                    feedsDatabase.feedsDoa().updateRecord(title, link, Integer.parseInt(id));
+                    feedsDatabase.feedsDoa().updateRecord(title, link, Integer.parseInt(id), seconds);
 
                     returnToFeeds();
 
@@ -119,9 +118,9 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
             case R.id.btn_delete:
 
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Delete")
-                        .setMessage("Are you sure?")
-                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.delete))
+                        .setMessage(getString(R.string.sure))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -130,7 +129,7 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
                                 returnToFeeds();
                             }
                         })
-                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // do nothing
@@ -148,9 +147,9 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
     private void showError(String txt) {
 
         new AlertDialog.Builder(getContext())
-                .setTitle("Error!")
+                .setTitle(getString(R.string.error))
                 .setMessage(txt)
-                .setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // do nothing

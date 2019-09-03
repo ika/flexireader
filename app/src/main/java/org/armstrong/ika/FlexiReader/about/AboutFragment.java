@@ -20,7 +20,6 @@ public class AboutFragment extends Fragment {
     private TextView appName;
     private TextView aboutText;
     public String content;
-    private int clickCount = 0;
     private String textSize;
 
     SharedPreferences sharedPreferences;
@@ -37,7 +36,7 @@ public class AboutFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
-        textSize = sharedPreferences.getString("textSize", "14");
+        textSize = sharedPreferences.getString("textSize", "16");
 
         content = Utils.loadAsset(getContext(),"about.txt");
 

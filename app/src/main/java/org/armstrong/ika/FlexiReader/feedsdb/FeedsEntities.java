@@ -15,6 +15,8 @@ public class FeedsEntities {
     private String link;
     @ColumnInfo(name = "feedId")
     private String feedId;
+    @ColumnInfo(name = "time")
+    private long time;
 
     public int getId(){return id;}
     public void setId(int id) {this.id = id;}
@@ -27,6 +29,9 @@ public class FeedsEntities {
 
     public String getFeedId() {return feedId;}
     public void setFeedId(String feedId) {this.feedId = feedId;}
+
+    public long getTime() {return time;}
+    public void setTime(long time) {this.time = time;}
 
 
 }
