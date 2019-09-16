@@ -8,31 +8,35 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-            <include layout="@layout/main_appbar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <include layout="@layout/main_content" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-<!--    <androidx.drawerlayout.widget.DrawerLayout-->
-<!--        android:id="@+id/drawer_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        tools:openDrawer="start">-->
+        </androidx.appcompat.widget.Toolbar>
 
-<!--        <include layout="@layout/main_appbar" />-->
+    </com.google.android.material.appbar.AppBarLayout>
 
-<!--        <include layout="@layout/main_content" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MainActivity">
 
-<!--        <com.google.android.material.navigation.NavigationView-->
-<!--            android:id="@+id/nav_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="start"-->
-<!--            android:fitsSystemWindows="true"-->
-<!--            app:headerLayout="@layout/nav_header"-->
-<!--            app:menu="@menu/activity_main_drawer" />-->
+        <FrameLayout
+            android:id="@+id/main_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity">
 
-<!--    </androidx.drawerlayout.widget.DrawerLayout>-->
+        </FrameLayout>
+
+    </RelativeLayout>
 
     <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
         android:id="@+id/bottom_navigation"

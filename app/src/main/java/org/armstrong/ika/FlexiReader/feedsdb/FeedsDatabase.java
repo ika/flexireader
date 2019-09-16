@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import static org.armstrong.ika.FlexiReader.app.Constants.DB_NAME_FEEDS;
 
-@Database(entities = {FeedsEntities.class}, version = 2)
+@Database(entities = {FeedsEntities.class}, version = 1)
 public abstract class FeedsDatabase extends RoomDatabase {
 
     public abstract FeedsDoa feedsDoa();
@@ -20,7 +20,7 @@ public abstract class FeedsDatabase extends RoomDatabase {
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            // using a premade database - see assets
+            // nothing to migrate
         }
     };
 

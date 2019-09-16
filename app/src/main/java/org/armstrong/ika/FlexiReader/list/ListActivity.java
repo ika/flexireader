@@ -1,16 +1,24 @@
 package org.armstrong.ika.FlexiReader.list;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -18,6 +26,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 import org.armstrong.ika.FlexiReader.MainActivity;
 import org.armstrong.ika.FlexiReader.R;
+import org.armstrong.ika.FlexiReader.add.AddRecordActivity;
 import org.armstrong.ika.FlexiReader.app.Utils;
 import org.armstrong.ika.FlexiReader.more.MoreActivity;
 
@@ -29,6 +38,10 @@ public class ListActivity extends AppCompatActivity {
     SharedPreferences.Editor sharedPreferencesEditor;
 
     private AHBottomNavigation bottomNavigation;
+
+    public SearchView searchView;
+    public ImageView closeButton;
+    public EditText searchText;
 
     private ActionBar ab;
 
@@ -47,8 +60,52 @@ public class ListActivity extends AppCompatActivity {
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
         textSize = sharedPreferences.getString("textSize", "16");
 
+        searchView = findViewById(R.id.searchesInput);
+
+        // input text field
+        searchText = searchView.findViewById(R.id.search_src_text);
+
+        // listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_frame_layout, ListFragment.newInstance(query))
+                        .commitNow();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+        });
+
+        // Catch event on [x] button inside search view
+        closeButton = searchView.findViewById(R.id.search_close_btn);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // clear search field
+                searchText.setText("");
+
+                hideSoftKeyboard(searchText);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_frame_layout, ListFragment.newInstance(""))
+                        .commitNow();
+
+            }
+        });
+
         // Toolbar layout
-        Toolbar toolbar = findViewById(R.id.more_toolbar);
+        Toolbar toolbar = findViewById(R.id.list_toolbar);
         setSupportActionBar(toolbar);
 
         // custom title bar
@@ -116,7 +173,7 @@ public class ListActivity extends AppCompatActivity {
         bottomNavigation.setCurrentItem(0);
 
         // Quick return animation
-        bottomNavigation.setBehaviorTranslationEnabled(false);
+        bottomNavigation.setBehaviorTranslationEnabled(true);
 
         // Set listeners
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
@@ -145,7 +202,7 @@ public class ListActivity extends AppCompatActivity {
 
         // Fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.list_frame_layout, ListFragment.newInstance())
+                .replace(R.id.list_frame_layout, ListFragment.newInstance(""))
                 .commitNow();
 
 
@@ -173,6 +230,11 @@ public class ListActivity extends AppCompatActivity {
                 this.onBackPressed();
                 break;
 
+            case R.id.add_icon:
+                Intent addRecord = new Intent(ListActivity.this, AddRecordActivity.class);
+                startActivity(addRecord);
+                break;
+
             default:
                 break;
         }
@@ -183,5 +245,17 @@ public class ListActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(ListActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void hideSoftKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.add_menu, menu);
+        return true;
     }
 }

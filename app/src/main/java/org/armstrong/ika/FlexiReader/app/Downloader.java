@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.net.URLConnection;
 
 import java.net.URL;
-import java.util.zip.GZIPInputStream;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -51,9 +50,11 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
         try {
             URLConnection openConnection = new URL(url).openConnection();
             is = new URL(url).openConnection().getInputStream();
-            if ("gzip".equals(openConnection.getContentEncoding())) {
-                is = new GZIPInputStream(is);
-            }
+
+//            if ("gzip".equals(openConnection.getContentEncoding())) {
+//                is = new GZIPInputStream(is);
+//            }
+
             InputSource source = new InputSource(is);
             SyndFeedInput input = new SyndFeedInput();
             feed = input.build(source);
@@ -61,7 +62,7 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
             is.close();
 
         } catch (Exception e) {
-            Log.e("logg", "doInBackground: Exception occured when building the feed object out of the url ", e);
+            Log.e("logg", "doInBackground: Exception occured when building url "+url, e);
         } finally {
 
         }

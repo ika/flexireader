@@ -34,6 +34,7 @@ public class MoreColorPickerSheet extends BottomSheetDialogFragment {
     private MoreColorPickerModel moreColorPickerModel;
     private String ws;
     private String color;
+    private String textSize;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MoreColorPickerSheet extends BottomSheetDialogFragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         ws = sharedPreferences.getString("wheelStyle", "0");
         color = sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark));
+        textSize = sharedPreferences.getString("textSize", "16");
 
     }
 
@@ -71,7 +73,7 @@ public class MoreColorPickerSheet extends BottomSheetDialogFragment {
 
         recyclerView = view.findViewById(R.id.NotesSheetRecyclerView);
 
-        moreColorPickerSheetAdapter = new MoreColorPickerSheetAdapter(menuItems, ws, color);
+        moreColorPickerSheetAdapter = new MoreColorPickerSheetAdapter(menuItems, ws, color, textSize);
 
         recyclerView.setHasFixedSize(true);
 

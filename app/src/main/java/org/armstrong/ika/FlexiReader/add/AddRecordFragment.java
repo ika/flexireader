@@ -14,9 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import org.armstrong.ika.FlexiReader.R;
-import org.armstrong.ika.FlexiReader.feeds.FeedActivity;
+
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
+import org.armstrong.ika.FlexiReader.list.ListActivity;
 
 import java.util.UUID;
 
@@ -123,7 +124,7 @@ public class AddRecordFragment extends Fragment implements View.OnClickListener 
     }
 
     private void returnToFeeds() {
-        Intent intent = new Intent(getActivity(), FeedActivity.class)
+        Intent intent = new Intent(getActivity(), ListActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

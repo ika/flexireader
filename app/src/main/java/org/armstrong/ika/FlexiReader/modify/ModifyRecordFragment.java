@@ -13,15 +13,13 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import org.armstrong.ika.FlexiReader.R;
-import org.armstrong.ika.FlexiReader.feeds.FeedActivity;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
+import org.armstrong.ika.FlexiReader.list.ListActivity;
 
 public class ModifyRecordFragment extends Fragment implements View.OnClickListener {
 
-    private TextView hiddenID;
     private EditText nameEditText;
     private EditText linkEditText;
     private View view;
@@ -95,7 +93,6 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
 
                 long seconds = System.currentTimeMillis() / 1000l;
 
-                //String id = hiddenID.getText().toString();
                 String title = nameEditText.getText().toString();
                 String link = linkEditText.getText().toString();
 
@@ -160,7 +157,7 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
     }
 
     private void returnToFeeds() {
-        Intent home_intent = new Intent(getActivity(), FeedActivity.class)
+        Intent home_intent = new Intent(getActivity(), ListActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(home_intent);
     }

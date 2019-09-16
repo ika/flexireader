@@ -159,6 +159,9 @@ public class MoreActivity extends AppCompatActivity {
         // change toolbar colour
         ab.setBackgroundDrawable(new ColorDrawable(selectedColor));
 
+        // bottom navigation active icon
+        bottomNavigation.setAccentColor(selectedColor);
+
         // update settings colour
         sharedPreferencesEditor = sharedPreferences.edit();
         sharedPreferencesEditor.putString("color", Integer.toString(selectedColor));

@@ -16,8 +16,11 @@ import org.armstrong.ika.FlexiReader.MainActivity;
 import org.armstrong.ika.FlexiReader.R;
 import org.armstrong.ika.FlexiReader.app.DividerLineDecoration;
 import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
+import org.armstrong.ika.FlexiReader.app.Utils;
+
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
+import org.armstrong.ika.FlexiReader.modify.ModifyRecordActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +39,15 @@ public class ListFragment extends Fragment {
 
     private String textSize;
 
-    public static ListFragment newInstance() {
+    String query;
+
+    public static ListFragment newInstance(String query) {
 
         ListFragment listFragment = new ListFragment();
+
+        Bundle args = new Bundle();
+        args.putString("query", query);
+        listFragment.setArguments(args);
 
         return listFragment;
     }
@@ -50,7 +59,14 @@ public class ListFragment extends Fragment {
         textSize = sharedPreferences.getString("textSize", "16");
 
         feedsDatabase = FeedsDatabase.getInstance(getActivity());
-        listItems = feedsDatabase.feedsDoa().getFeedsRecords();
+
+        query = getArguments().getString("query", "");
+
+        if (query.equals("")) {
+            listItems = feedsDatabase.feedsDoa().getFeedsRecords();
+        } else {
+            listItems = feedsDatabase.feedsDoa().getFeedSearchRecords(query);
+        }
 
     }
 
@@ -83,6 +99,11 @@ public class ListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        String cnt = Integer.toString(feedsDatabase.feedsDoa().countRecords());
+        cnt = cnt + " " + getString(R.string.items);
+
+        Utils.makeToast(getContext(), cnt);
+
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
                 recyclerView, new RecyclerTouchListener.ClickListener() {
 
@@ -108,7 +129,14 @@ public class ListFragment extends Fragment {
 
             // long click
             public void onLongClick(View view, int position) {
-                // do nothing
+
+                FeedsEntities feedsEntities = listItems.get(position);
+
+                Intent modifyRecord = new Intent(getActivity(), ModifyRecordActivity.class);
+                modifyRecord.putExtra("title", feedsEntities.getTitle());
+                modifyRecord.putExtra("link", feedsEntities.getLink());
+                modifyRecord.putExtra("id", Integer.toString(feedsEntities.getId()));
+                startActivity(modifyRecord);
             }
         }));
 

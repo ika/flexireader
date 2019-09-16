@@ -51,6 +51,19 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="f4f416" />
+                                                <entry key="scalingPercent" value="70" />
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="foregroundClipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/home/ika/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_rss_feed_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -95,7 +108,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="foregroundAssetType" value="TEXT" />
+                                      <entry key="foregroundAssetType" value="CLIP_ART" />
                                     </map>
                                   </option>
                                 </PersistentState>

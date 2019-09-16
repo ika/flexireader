@@ -17,11 +17,14 @@ public class MoreColorPickerSheetAdapter extends RecyclerView.Adapter<MoreColorP
         private List<MoreColorPickerModel> menuList;
         private String ws;
         private int color;
+    private int textSize;
 
-        public MoreColorPickerSheetAdapter(List<MoreColorPickerModel> menulist, String ws, String color) {
+        public MoreColorPickerSheetAdapter(List<MoreColorPickerModel> menulist,
+                                           String ws, String color, String textSize) {
             this.menuList = menulist;
             this.ws = ws;
             this.color = Integer.parseInt(color);
+            this.textSize = Integer.parseInt(textSize);
 
         }
 
@@ -47,6 +50,8 @@ public class MoreColorPickerSheetAdapter extends RecyclerView.Adapter<MoreColorP
                 customViewHolder.colorPickerSheetItem.setTextColor(color);
                 customViewHolder.colorPickerSheetItem.setTypeface(null, Typeface.BOLD_ITALIC);
             }
+
+            customViewHolder.colorPickerSheetItem.setTextSize(textSize);
 
         }
 

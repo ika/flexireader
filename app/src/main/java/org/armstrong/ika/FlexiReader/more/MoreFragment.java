@@ -17,7 +17,7 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import org.armstrong.ika.FlexiReader.app.DividerLineDecoration;
-import org.armstrong.ika.FlexiReader.feeds.FeedActivity;
+
 import org.armstrong.ika.FlexiReader.R;
 import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
 import org.armstrong.ika.FlexiReader.about.AboutActivity;
@@ -68,7 +68,6 @@ public class MoreFragment extends Fragment {
         currentBackgroundColor = Integer.parseInt(sharedPreferences.getString("color", Integer.toString(R.color.colorPrimaryDark)));
 
         String items[] = {
-                getString(R.string.edit_news),
                 getString(R.string.color_picker),
                 getString(R.string.color_picker_style),
                 getString(R.string.images),
@@ -122,12 +121,7 @@ public class MoreFragment extends Fragment {
 
                 switch (position) {
 
-                    case 0: // FeedsEntities
-                        Intent feedActivity = new Intent(getContext(), FeedActivity.class);
-                        startActivity(feedActivity);
-                        break;
-
-                    case 1: // color picker
+                    case 0: // color picker
 
                         ws = sharedPreferences.getString("wheelStyle", "0");
 
@@ -180,7 +174,7 @@ public class MoreFragment extends Fragment {
                                 .show();
                         break;
 
-                    case 2: // Color Picker Style
+                    case 1: // Color Picker Style
 
                         final MoreColorPickerSheet moreColorPickerSheet = new MoreColorPickerSheet();
                         moreColorPickerSheet.show(getActivity().getSupportFragmentManager(), "moreColorPickerSheet");
@@ -194,7 +188,7 @@ public class MoreFragment extends Fragment {
 
                         break;
 
-                    case 3: //Images On/Off
+                    case 2: //Images On/Off
 
                         final MoreImageSheet moreImageSheet = new MoreImageSheet();
                         moreImageSheet.show(getActivity().getSupportFragmentManager(), "moreImageSheet");
@@ -208,7 +202,7 @@ public class MoreFragment extends Fragment {
 
                         break;
 
-                    case 4: // text size
+                    case 3: // text size
                         final MoreSizeSheet moreSizeSheet = new MoreSizeSheet();
                         moreSizeSheet.show(getActivity().getSupportFragmentManager(), "moreSizeSheet");
 
@@ -221,7 +215,7 @@ public class MoreFragment extends Fragment {
 
                         break;
 
-                    case 5: // share FlexiReader
+                    case 4: // share FlexiReader
 
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(getString(R.string.shareFRtext));
@@ -241,7 +235,7 @@ public class MoreFragment extends Fragment {
                         startActivity(intent);
                         break;
 
-                    case 6: // about
+                    case 5: // about
                         Intent moreActivity = new Intent(getContext(), AboutActivity.class);
                         startActivity(moreActivity);
                         break;

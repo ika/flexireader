@@ -12,6 +12,9 @@ public interface FeedsDoa {
     @Query("SELECT * FROM feeds ORDER BY time DESC")
     List<FeedsEntities> getFeedsRecords();
 
+    @Query("SELECT * FROM feeds WHERE title LIKE  '%' || :query || '%' ORDER BY time DESC")
+    List<FeedsEntities> getFeedSearchRecords(String query);
+
     @Query("UPDATE feeds SET title=:title, link=:link, time=:time WHERE id=:id")
     void updateRecord(String title, String link, int id, long time);
 

@@ -26,15 +26,6 @@
         </activity>
 
         <activity
-            android:name=".feeds.FeedActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".more.MoreActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".more.MoreActivity" />
-        </activity>
-
-        <activity
             android:name=".add.AddRecordActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".feeds.FeedActivity" >

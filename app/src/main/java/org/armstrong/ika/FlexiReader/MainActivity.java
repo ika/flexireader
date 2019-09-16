@@ -19,7 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import org.armstrong.ika.FlexiReader.app.CopierFeeds;
 import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
@@ -29,10 +28,6 @@ import org.armstrong.ika.FlexiReader.more.MoreActivity;
 import org.armstrong.ika.FlexiReader.app.Utils;
 
 import java.util.List;
-
-//
-//public class MainActivity extends AppCompatActivity
-//        implements NavigationView.OnNavigationItemSelectedListener {
 
 
 public class MainActivity extends AppCompatActivity {
@@ -72,7 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
         instance = this;
 
-        new CopierFeeds(this).initializeCopier();
+        // install raw database
+        //new CopierFeeds(this).initializeCopier();
+        // install feeds in empty database
+        new InstallFeeds(this);
 
         // read saved preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -108,22 +106,6 @@ public class MainActivity extends AppCompatActivity {
         textOne.setTextColor(Color.parseColor("#FFFFFF"));
         textOne.setTextSize(Integer.parseInt(textSize) + 4);
 
-//        // Navigation Drawer
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = findViewById(R.id.nav_view);
-//
-//        // change header background color
-//        View header = navigationView.getHeaderView(0);
-//        LinearLayout sideNavLayout = header.findViewById(R.id.side_nav_layout);
-//        sideNavLayout.setBackgroundColor(Integer.parseInt(color));
-
-        //navigationView.setNavigationItemSelectedListener(this);
-
         // get saved dbid
         savedID = sharedPreferences.getInt("dbid", 1);
 
@@ -155,19 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(listActivity);
             }
         });
-
-//        // populate drawer menu
-//        Menu drawerMenu = navigationView.getMenu();
-//
-//        List<FeedsEntities> allValues = feedsDatabase.feedsDoa().getFeedsRecords();
-//
-//        for (FeedsEntities value : allValues) {
-//            drawerMenu.add(R.id.second_group, value.getId(), 0, value.getTitle())
-//                    .setIcon(R.drawable.ic_chevron_right_black_24dp);
-//        }
-//
-//        drawerMenu.setGroupCheckable(R.id.second_group, true, true);
-//        drawerMenu.setGroupVisible(R.id.second_group, true);
 
         // Bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -266,54 +235,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int menuID = item.getItemId();
-//
-//        switch (menuID) {
-//
-//            case R.id.nav_settings:
-//                Intent moreActivity = new Intent(MainActivity.this, MoreActivity.class);
-//                startActivity(moreActivity);
-//                break;
-//
-//            default:
-//
-//                saveSelection(menuID);
-//
-//                if (!String.valueOf(savedID).equals(String.valueOf(menuID))) {
-//                    Intent i = new Intent(MainActivity.this, MainActivity.class);
-//                    startActivity(i);
-//                }
-//
-//                break;
-//        }
-//
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
-
-//    private void saveSelection(int menuID) {
-//
-//        sharedPreferencesEditor = sharedPreferences.edit();
-//        sharedPreferencesEditor.putInt("dbid", menuID);
-//        sharedPreferencesEditor.apply();
-//
-//    }
-
     @Override
     public void onBackPressed() {
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            Intent a = new Intent(Intent.ACTION_MAIN);
-//            a.addCategory(Intent.CATEGORY_HOME);
-//            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(a);
-//        }
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

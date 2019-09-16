@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.armstrong.ika.FlexiReader.R;
-import org.armstrong.ika.FlexiReader.feeds.FeedActivity;
+import org.armstrong.ika.FlexiReader.list.ListActivity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,7 +78,7 @@ public class AddRecordActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(AddRecordActivity.this, FeedActivity.class);
+        Intent intent = new Intent(AddRecordActivity.this, ListActivity.class);
         startActivity(intent);
     }
 
