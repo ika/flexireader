@@ -7,6 +7,7 @@ import android.util.Log;
 import org.armstrong.ika.FlexiReader.MainActivity;
 import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
 import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
+import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
 import org.armstrong.ika.FlexiReader.main.MainFragment;
 import org.xml.sax.InputSource;
 
@@ -22,7 +23,7 @@ import com.rometools.rome.io.SyndFeedInput;
 
 public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
 
-    protected CacheDatabase cacheDatabase;
+    protected CacheRepository cacheRepository;
     protected CacheEntities cacheEntities;
 
     private Context context;
@@ -37,7 +38,7 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
         this.url = urlAddress;
         this.feedID = feedID;
 
-        cacheDatabase = CacheDatabase.getInstance(context);
+        cacheRepository = new CacheRepository(context);
 
     }
 
@@ -81,7 +82,7 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
             if (syndFeed.getEntries().size() > 0) {
 
                 // delete all feed entries
-                cacheDatabase.cacheDoa().deleteCacheByFeedId(feedID);
+                cacheRepository.deleteCacheByFeedId(feedID);
 
                 for (SyndEntry entry : syndFeed.getEntries()) {
 
@@ -124,7 +125,7 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
                     //cacheEntities.setHash(hash);
 
                     // save
-                    cacheDatabase.cacheDoa().insertCacheRecord(cacheEntities);
+                    cacheRepository.insertCacheRecord(cacheEntities);
 
                 }
 

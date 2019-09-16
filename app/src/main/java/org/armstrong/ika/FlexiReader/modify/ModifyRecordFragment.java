@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import org.armstrong.ika.FlexiReader.R;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
+import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.list.ListActivity;
 
 public class ModifyRecordFragment extends Fragment implements View.OnClickListener {
@@ -25,7 +26,7 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
     private View view;
     private Button updateBtn, deleteBtn;
 
-    protected FeedsDatabase feedsDatabase;
+    protected FeedsRepository feedsRepository;
 
     private String id, title, link;
 
@@ -39,7 +40,7 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        feedsDatabase = FeedsDatabase.getInstance(getContext());
+        feedsRepository = new FeedsRepository(getActivity());
 
         Intent intent = getActivity().getIntent();
         id = intent.getStringExtra("id");
@@ -104,7 +105,7 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
                     showError(getString(R.string.feeds_add_link_error));
                 } else {
 
-                    feedsDatabase.feedsDoa().updateRecord(title, link, Integer.parseInt(id), seconds);
+                    feedsRepository.updateRecord(title, link, Integer.parseInt(id), seconds);
 
                     returnToFeeds();
 
@@ -121,7 +122,7 @@ public class ModifyRecordFragment extends Fragment implements View.OnClickListen
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                feedsDatabase.feedsDoa().deleteRecord(Integer.parseInt(id));
+                                feedsRepository.deleteRecord(Integer.parseInt(id));
 
                                 returnToFeeds();
                             }

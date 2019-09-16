@@ -7,7 +7,7 @@ import java.util.List;
 public class FeedsRepository {
 
     protected FeedsDoa feedsDoa;
-    private List<FeedsEntities> feedsEntities;
+    protected List<FeedsEntities> feedsEntities;
 
     public FeedsRepository(Context context) {
         feedsDoa = FeedsDatabase.getInstance(context).feedsDoa();

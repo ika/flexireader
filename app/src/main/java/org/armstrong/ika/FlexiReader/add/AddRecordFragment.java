@@ -17,6 +17,7 @@ import org.armstrong.ika.FlexiReader.R;
 
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
+import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.list.ListActivity;
 
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class AddRecordFragment extends Fragment implements View.OnClickListener 
     private EditText linkEditText;
     private Button button;
     private View view;
-    protected FeedsDatabase feedsDatabase;
+    protected FeedsRepository feedsRepository;
 
     public static AddRecordFragment newInstance() {
 
@@ -39,7 +40,7 @@ public class AddRecordFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        feedsDatabase = FeedsDatabase.getInstance(getContext());
+        feedsRepository = new FeedsRepository(getActivity());
 
     }
 
@@ -98,7 +99,7 @@ public class AddRecordFragment extends Fragment implements View.OnClickListener 
                     feedsEntities.setFeedId(feedID);
                     feedsEntities.setTime(seconds);
 
-                    feedsDatabase.feedsDoa().insertFeed(feedsEntities);
+                    feedsRepository.insertFeed(feedsEntities);
 
                     this.returnToFeeds();
                 }

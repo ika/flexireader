@@ -20,8 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
+import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
+import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.list.ListActivity;
 import org.armstrong.ika.FlexiReader.main.MainFragment;
 import org.armstrong.ika.FlexiReader.more.MoreActivity;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected SharedPreferences sharedPreferences;
 
-    protected FeedsDatabase feedsDatabase;
+    protected FeedsRepository feedsRepository;
 
     private ActionBar ab;
 
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private String prefCache;
     private String textSize;
 
-    protected CacheDatabase cacheDatabase;
+    protected CacheRepository cacheRepository;
 
 
     @Override
@@ -79,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
         textSize = sharedPreferences.getString("textSize", "16");
 
         // init Cache database
-        cacheDatabase = CacheDatabase.getInstance(this);
+        cacheRepository = new CacheRepository(this);
 
         // init Feeds database
-        feedsDatabase = FeedsDatabase.getInstance(this);
+        feedsRepository = new FeedsRepository(this);
 
         // delete old entrys
         //cacheDatabase.cacheDoa().deleteCacheByDate(Utils.calculateOffset(Integer.parseInt(prefCache)));
@@ -109,16 +111,16 @@ public class MainActivity extends AppCompatActivity {
         // get saved dbid
         savedID = sharedPreferences.getInt("dbid", 1);
 
-        if (feedsDatabase.feedsDoa().checkIDexists(savedID) > 0) { // does ID exist?
+        if (feedsRepository.checkIDexists(savedID) > 0) { // does ID exist?
 
-            List<FeedsEntities> feedsEntities = feedsDatabase.feedsDoa().getRecordById(savedID);
+            List<FeedsEntities> feedsEntities = feedsRepository.getRecordById(savedID);
             savedTitle = feedsEntities.get(0).getTitle();
             urlAddress = feedsEntities.get(0).getLink();
             feedID = feedsEntities.get(0).getFeedId();
 
         } else { // ID does not exist - take the last one
 
-            List<FeedsEntities> feedsEntities = feedsDatabase.feedsDoa().getOneRow();
+            List<FeedsEntities> feedsEntities = feedsRepository.getOneRow();
             savedTitle = feedsEntities.get(0).getTitle();
             urlAddress = feedsEntities.get(0).getLink();
             feedID = feedsEntities.get(0).getFeedId();
@@ -228,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showFeedCount() {
 
-        String cnt = Integer.toString(cacheDatabase.cacheDoa().countCacheByFeed(feedID));
+        String cnt = Integer.toString(cacheRepository.countCacheByFeed(feedID));
         cnt = cnt + " " + getString(R.string.items);
 
         Utils.makeToast(this, cnt);

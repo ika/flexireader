@@ -7,7 +7,7 @@ import java.util.List;
 public class CacheRepository {
 
     protected CacheDoa cacheDoa;
-    List<CacheEntities> allCacheRecords;
+    protected List<CacheEntities> cacheEntities;
 
     public CacheRepository(Context context) {
         cacheDoa = CacheDatabase.getInstance(context).cacheDoa();
@@ -22,7 +22,7 @@ public class CacheRepository {
     }
 
     public List<CacheEntities> getAllCacheRecords(String feedId) {
-        return allCacheRecords = cacheDoa.getAllCacheRecords(feedId);
+        return cacheEntities = cacheDoa.getAllCacheRecords(feedId);
     }
 
     public void insertCacheRecord(CacheEntities cacheEntities){

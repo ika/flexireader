@@ -20,6 +20,7 @@ import org.armstrong.ika.FlexiReader.app.Utils;
 
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
+import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.modify.ModifyRecordActivity;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class ListFragment extends Fragment {
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor sharedPreferencesEditor;
 
-    protected FeedsDatabase feedsDatabase;
+    protected FeedsRepository feedsRepository;
 
     private RecyclerView recyclerView;
     private ListFragmentAdapter listFragmentAdapter;
@@ -58,14 +59,14 @@ public class ListFragment extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         textSize = sharedPreferences.getString("textSize", "16");
 
-        feedsDatabase = FeedsDatabase.getInstance(getActivity());
+        feedsRepository = new FeedsRepository(getActivity());
 
         query = getArguments().getString("query", "");
 
         if (query.equals("")) {
-            listItems = feedsDatabase.feedsDoa().getFeedsRecords();
+            listItems = feedsRepository.getFeedsRecords();
         } else {
-            listItems = feedsDatabase.feedsDoa().getFeedSearchRecords(query);
+            listItems = feedsRepository.getFeedSearchRecords(query);
         }
 
     }
@@ -99,7 +100,7 @@ public class ListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String cnt = Integer.toString(feedsDatabase.feedsDoa().countRecords());
+        String cnt = Integer.toString(feedsRepository.countRecords());
         cnt = cnt + " " + getString(R.string.items);
 
         Utils.makeToast(getContext(), cnt);
@@ -120,7 +121,7 @@ public class ListFragment extends Fragment {
                 sharedPreferencesEditor.apply();
 
                 // update time to use in sorting
-                feedsDatabase.feedsDoa().updateTime(seconds, id);
+                feedsRepository.updateTime(seconds, id);
 
                 Intent mainActivity = new Intent(getActivity(), MainActivity.class);
                 startActivity(mainActivity);

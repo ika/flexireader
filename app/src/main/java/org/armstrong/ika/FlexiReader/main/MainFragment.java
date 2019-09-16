@@ -14,6 +14,7 @@ import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
 import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
 import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
 import org.armstrong.ika.FlexiReader.app.Utils;
+import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class MainFragment extends Fragment {
 
     public SwipeRefreshLayout swipeRefreshLayout;
 
-    protected CacheDatabase cacheDatabase;
+    protected CacheRepository cacheRepository;
 
     private int dbCount;
 
@@ -65,7 +66,7 @@ public class MainFragment extends Fragment {
         urlAddress = getArguments().getString("urlAddress", "");
         textSize = getArguments().getString("textSize", "16");
 
-        cacheDatabase = CacheDatabase.getInstance(getContext());
+        cacheRepository = new CacheRepository(getContext());
 
 
     }
@@ -173,7 +174,7 @@ public class MainFragment extends Fragment {
 
     public void displayList() {
 
-        articles = cacheDatabase.cacheDoa().getAllCacheRecords(feedID);
+        articles = cacheRepository.getAllCacheRecords(feedID);
 
         mainFragmentAdapter = new MainFragmentAdapter(getContext(), articles, textSize);
 
@@ -186,7 +187,7 @@ public class MainFragment extends Fragment {
     }
 
     private int getDbCount() {
-        dbCount = cacheDatabase.cacheDoa().countCacheByFeed(feedID);
+        dbCount = cacheRepository.countCacheByFeed(feedID);
         return dbCount;
     }
 
