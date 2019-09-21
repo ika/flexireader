@@ -1,4 +1,4 @@
-# flexireader
+# flexiReader
 
 FlexiReader is a fast, safe and secure RSS news reader.
 
