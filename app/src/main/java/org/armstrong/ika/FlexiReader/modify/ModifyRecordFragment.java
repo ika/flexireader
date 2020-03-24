@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import org.armstrong.ika.FlexiReader.R;
-import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.list.ListActivity;
 

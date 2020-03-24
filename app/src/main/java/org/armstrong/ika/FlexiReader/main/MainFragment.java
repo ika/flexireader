@@ -11,7 +11,6 @@ import android.webkit.URLUtil;
 import org.armstrong.ika.FlexiReader.R;
 import org.armstrong.ika.FlexiReader.app.Downloader;
 import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
-import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
 import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
 import org.armstrong.ika.FlexiReader.app.Utils;
 import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;

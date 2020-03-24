@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.armstrong.ika.FlexiReader.MainActivity;
-import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
 import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
 import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
 import org.armstrong.ika.FlexiReader.main.MainFragment;

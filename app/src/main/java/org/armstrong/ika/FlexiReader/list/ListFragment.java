@@ -18,7 +18,6 @@ import org.armstrong.ika.FlexiReader.app.DividerLineDecoration;
 import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
 import org.armstrong.ika.FlexiReader.app.Utils;
 
-import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.modify.ModifyRecordActivity;

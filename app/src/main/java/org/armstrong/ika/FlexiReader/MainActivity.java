@@ -19,9 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import org.armstrong.ika.FlexiReader.cachedb.CacheDatabase;
 import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
-import org.armstrong.ika.FlexiReader.feedsdb.FeedsDatabase;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsEntities;
 import org.armstrong.ika.FlexiReader.feedsdb.FeedsRepository;
 import org.armstrong.ika.FlexiReader.list.ListActivity;
