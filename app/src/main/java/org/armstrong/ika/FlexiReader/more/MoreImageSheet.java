@@ -101,7 +101,7 @@ public class MoreImageSheet extends BottomSheetDialogFragment {
                         // make image setting current
                         sharedPreferencesEditor = sharedPreferences.edit();
                         sharedPreferencesEditor.putString("prefImages", switched);
-                        sharedPreferencesEditor.commit();
+                        sharedPreferencesEditor.apply();
 
                     }
 

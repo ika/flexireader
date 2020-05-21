@@ -78,7 +78,12 @@ public class ListActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String query) {
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_frame_layout, ListFragment.newInstance(query))
+                        .commitNow();
+
                 return false;
             }
 
@@ -218,7 +223,7 @@ public class ListActivity extends AppCompatActivity {
         // update settings colour
         sharedPreferencesEditor = sharedPreferences.edit();
         sharedPreferencesEditor.putString("color", Integer.toString(selectedColor));
-        sharedPreferencesEditor.commit();
+        sharedPreferencesEditor.apply();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -248,6 +253,7 @@ public class ListActivity extends AppCompatActivity {
 
     public void hideSoftKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
