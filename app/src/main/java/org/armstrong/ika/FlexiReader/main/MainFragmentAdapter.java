@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.armstrong.ika.FlexiReader.app.PicassoClient;
 import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.armstrong.ika.FlexiReader.R.*;
@@ -46,7 +47,11 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
         CacheEntities article = articles.get(position);
 
         //Render image using Picasso library
-        PicassoClient.downloadImage(context, article.getImageUrl(), customViewHolder.postImg);
+        try {
+            PicassoClient.downloadImage(context, article.getImageUrl(), customViewHolder.postImg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         customViewHolder.postTitle.setText(Html.fromHtml(article.getTitle()));
         customViewHolder.postTitle.setTextSize(textSize + 4);

@@ -2,23 +2,27 @@ package org.armstrong.ika.FlexiReader.app;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.rometools.modules.mediarss.MediaEntryModuleImpl;
+import com.rometools.modules.mediarss.MediaModule;
+import com.rometools.rome.feed.synd.SyndEnclosure;
+import com.rometools.rome.feed.synd.SyndEnclosureImpl;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 
 import org.armstrong.ika.FlexiReader.MainActivity;
 import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
 import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
 import org.armstrong.ika.FlexiReader.main.MainFragment;
-import org.xml.sax.InputSource;
 
-import java.io.InputStream;
-
-import java.net.URLConnection;
-
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.SyndFeedInput;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
 
@@ -26,55 +30,77 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
     protected CacheEntities cacheEntities;
 
     private Context context;
-    private String url;
+    private URL url;
     private String feedID;
+    XmlReader reader = null;
 
     //private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    public Downloader(Context context, String urlAddress, String feedID) {
+    public Downloader(Context context, String urlAddress, String feedID) throws MalformedURLException {
 
         this.context = context;
-        this.url = urlAddress;
+        //this.url = urlAddress;
         this.feedID = feedID;
+
+        url = new URL(urlAddress);
 
         cacheRepository = new CacheRepository(context);
 
     }
 
-    @Override
     protected SyndFeed doInBackground(Void... params) {
 
-        SyndFeed feed = null;
-        InputStream is;
+
+        //InputStream inputStream;
+
+        SyndFeed syndFeed = null;
+
+//        try {
+//            URLConnection urlConnection = new URL(url).openConnection();
+//            inputStream = urlConnection.getInputStream();
+//
+//            InputSource inputSource = new InputSource(inputStream);
+//
+//            SyndFeedInput input = new SyndFeedInput();
+//            feed = input.build(inputSource);
+//
+//            inputStream.close();
+//
+//        } catch (Exception e) {
+//            Log.e("logg", "doInBackground: Exception occured when building url " + url, e);
+//        } finally {
+//
+//        }
 
         try {
-            URLConnection openConnection = new URL(url).openConnection();
-            is = new URL(url).openConnection().getInputStream();
 
-//            if ("gzip".equals(openConnection.getContentEncoding())) {
-//                is = new GZIPInputStream(is);
-//            }
+            try {
+                reader = new XmlReader(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                syndFeed = new SyndFeedInput().build(reader);
+            } catch (FeedException e) {
+                e.printStackTrace();
+            }
 
-            InputSource source = new InputSource(is);
-            SyndFeedInput input = new SyndFeedInput();
-            feed = input.build(source);
-
-            is.close();
-
-        } catch (Exception e) {
-            Log.e("logg", "doInBackground: Exception occured when building url "+url, e);
         } finally {
-
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        return feed;
-
+        return syndFeed;
     }
 
-    @Override
-    protected void onPostExecute(SyndFeed feed) {
+    protected void onPostExecute(SyndFeed syndFeed) {
 
-        SyndFeed syndFeed = feed;
+        String image = "";
 
         if (syndFeed != null) {
 
@@ -85,29 +111,34 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
 
                 for (SyndEntry entry : syndFeed.getEntries()) {
 
-                    String description = "";
-//                if (entry.getDescription() != null && !entry.getDescription().equals("")) {
-//                    // strip html from description
-//                    description = entry.getDescription().getValue().replaceAll("\\<[^>]*>", "");
-//                }
-
-                    // strip html from description
-                    description = entry.getDescription().getValue().replaceAll("\\<[^>]*>", "");
-
-
-                    // make hash from title
-//                String ttl = entry.getTitle().replaceAll("[^a-zA-Z]", "");
-//                String hash = new String(Hex.encodeHex(DigestUtils.md5(ttl)));
-                    //String hash = entry.getUri();
-
                     // title
-                    String title = entry.getTitle();
+                    String title = entry.getTitle().trim();
 
                     // link
                     String link = entry.getLink();
 
-                    // image url
-                    String image = Utils.extractDescriptionImage(entry.getDescription().toString());
+                    // check media first
+                    image = getMediaContentUrl(entry);
+
+                    // then try enclosure url
+                    if (image.length() < 1) {
+                        List<SyndEnclosure> result = getEnclosures(entry);
+
+                        if (result.size() > 0) {
+                            for (int x = 0; x < result.size(); x++) {
+                                image = result.get(x).getUrl();
+                            }
+                        }
+
+                    }
+
+                    // finally, try description
+                    if (image.length() < 1) {
+                        image = Utils.extractDescriptionImage(entry.getDescription().toString());
+                    }
+
+                    // description - strip html
+                    String description = entry.getDescription().getValue().replaceAll("\\<[^>]*>", "").trim();
 
                     // date
                     //String date = "Published " + FORMATTER.format(item.getPubDate());
@@ -126,7 +157,14 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
                     // save
                     cacheRepository.insertCacheRecord(cacheEntities);
 
+                    // reset image var
+                    image = "";
+
                 }
+
+            } else {
+
+                Utils.makeToast(context.getApplicationContext(), "Zero results!");
 
             }
 
@@ -146,5 +184,51 @@ public class Downloader extends AsyncTask<Void, Void, SyndFeed> {
         MainActivity.getInstance().showFeedCount();
     }
 
+    public List getEnclosures(SyndEntry entry) {
 
+        List<SyndEnclosure> enc = entry.getEnclosures();
+        List<SyndEnclosure> result = new ArrayList<SyndEnclosure>(enc.size());
+
+        if(enc != null) {
+            for (SyndEnclosure e : enc) {
+                SyndEnclosureImpl ee = new SyndEnclosureImpl();
+                if (e != null) {
+                    ee.setUrl(e.getUrl());
+                    ee.setLength(e.getLength());
+                    ee.setType(e.getType());
+                }
+                result.add(ee);
+            }
+        }
+        return result;
+    }
+
+    public String getMediaContentUrl(SyndEntry entry) {
+
+        String image = "";
+        MediaEntryModuleImpl mediaEntryModule = (MediaEntryModuleImpl) entry.getModule(MediaModule.URI);
+
+        if(mediaEntryModule != null ) {
+
+            if (mediaEntryModule.getMediaContents().length > 0) {
+                String type = mediaEntryModule.getMediaContents()[mediaEntryModule.getMediaContents().length - 1].getType();
+                if (type.equals("image/jpeg")) {
+                    image = mediaEntryModule.getMediaContents()[mediaEntryModule.getMediaContents().length - 1].getReference().toString();
+                }
+
+            } else if (mediaEntryModule.getMetadata().getThumbnail().length > 0) {
+                image = mediaEntryModule.getMetadata().getThumbnail()[mediaEntryModule.getMetadata().getThumbnail().length - 1].getUrl().toString();
+
+            }
+
+        }
+
+//        System.out.println("*************************************");
+//        System.out.println(mediaEntryModule);
+//        System.out.println("*************************************");
+
+        return image;
+
+
+    }
 }

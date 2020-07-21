@@ -12,16 +12,18 @@ import com.squareup.picasso.Picasso;
 
 import org.armstrong.ika.FlexiReader.R;
 
+import java.io.IOException;
+
 public class PicassoClient {
 
     private static SharedPreferences sharedPreferences;
 
     private static String prefImages;
 
-    public static void downloadImage(Context context, String imageUrl, ImageView imageView) {
+    public static void downloadImage(Context context, String imageUrl, ImageView imageView) throws IOException {
 
         int noPicture = 0;
-        int withPicture = 250;
+        int withPicture = 340;
 
         // get user preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -58,6 +60,5 @@ public class PicassoClient {
 
         imageView.setLayoutParams(layoutParams);
     }
-
 
 }

@@ -8,19 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
 
-import org.armstrong.ika.FlexiReader.R;
-import org.armstrong.ika.FlexiReader.app.Downloader;
-import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
-import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
-import org.armstrong.ika.FlexiReader.app.Utils;
-import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
-
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import org.armstrong.ika.FlexiReader.R;
+import org.armstrong.ika.FlexiReader.app.Downloader;
+import org.armstrong.ika.FlexiReader.app.RecyclerTouchListener;
+import org.armstrong.ika.FlexiReader.app.Utils;
+import org.armstrong.ika.FlexiReader.cachedb.CacheEntities;
+import org.armstrong.ika.FlexiReader.cachedb.CacheRepository;
+
+import java.net.MalformedURLException;
+import java.util.List;
 
 public class MainFragment extends Fragment {
 
@@ -99,7 +100,11 @@ public class MainFragment extends Fragment {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {  // on pull down
-                        downLoadFeed();
+                        try {
+                            downLoadFeed();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
         swipeRefreshLayout.setDistanceToTriggerSync(30);
@@ -115,7 +120,11 @@ public class MainFragment extends Fragment {
                                     @Override
                                     public void run() {
                                         if (getDbCount() < 1) {
-                                            downLoadFeed();
+                                            try {
+                                                downLoadFeed();
+                                            } catch (MalformedURLException e) {
+                                                e.printStackTrace();
+                                            }
                                         } else {
                                             displayList();
                                         }
@@ -139,7 +148,7 @@ public class MainFragment extends Fragment {
                     intent.setData(Uri.parse(link));
                     getActivity().startActivity(intent);
                 } else {
-                    Utils.makeToast(getContext(),getString(R.string.url_invalid));
+                    Utils.makeToast(getContext(), getString(R.string.url_invalid));
                 }
 
 
@@ -149,16 +158,16 @@ public class MainFragment extends Fragment {
             public void onLongClick(View view, int position) {
 
                 CacheEntities article = articles.get(position);
-              //  String title = article.getTitle();
+                //  String title = article.getTitle();
                 String link = article.getLink();
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-              //  sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+                //  sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, link);
                 sendIntent.setType("text/plain");
                 sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                getActivity().startActivity(Intent.createChooser(sendIntent,getString(R.string.share_title)));
+                getActivity().startActivity(Intent.createChooser(sendIntent, getString(R.string.share_title)));
 
             }
 
@@ -190,7 +199,7 @@ public class MainFragment extends Fragment {
         return dbCount;
     }
 
-    private void downLoadFeed() {
+    private void downLoadFeed() throws MalformedURLException {
 
         if (!feedID.isEmpty()) {
 
